@@ -1,0 +1,1310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Monster Letters — Day 2: The Kitchen Labels</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Patrick+Hand&family=Caveat:wght@700&display=swap');
+
+  :root {
+    --purple-dark: #6B3FA0;
+    --purple-mid: #9B6DD7;
+    --purple-light: #E8D5F5;
+    --purple-bg: #F5EEFA;
+    --green-accent: #4CAF50;
+    --orange-accent: #FF9800;
+    --yellow-accent: #FFD54F;
+    --red-accent: #EF5350;
+    --gray-line: #CCBBDD;
+    --gray-light: #F0F0F0;
+    --text-dark: #2D1B4E;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Fredoka', sans-serif;
+    color: var(--text-dark);
+    background: #FAFAFA;
+  }
+
+  @media print {
+    body { background: white; }
+    .page {
+      page-break-after: always;
+      box-shadow: none !important;
+      margin: 0 !important;
+      border-radius: 0 !important;
+    }
+    .page:last-child { page-break-after: avoid; }
+    .no-print { display: none !important; }
+    @page { margin: 0.5in; size: letter; }
+  }
+
+  @media screen {
+    body { padding: 20px; background: #E8D5F5; }
+    .page {
+      max-width: 8.5in;
+      margin: 30px auto;
+      box-shadow: 0 4px 20px rgba(107, 63, 160, 0.2);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+  }
+
+  .page {
+    width: 8.5in;
+    min-height: 10in;
+    background: white;
+    padding: 0.5in;
+    position: relative;
+  }
+
+  /* ---------- SHARED COMPONENTS ---------- */
+  .cover-header {
+    text-align: center;
+    margin-bottom: 15px;
+  }
+
+  .cover-header .series-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--purple-mid);
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-bottom: 2px;
+  }
+
+  .cover-header h1 {
+    font-size: 38px;
+    font-weight: 700;
+    color: var(--purple-dark);
+    line-height: 1.1;
+    margin-bottom: 2px;
+  }
+
+  .cover-header .day-label {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--purple-mid);
+  }
+
+  .drill-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 3px solid var(--purple-light);
+  }
+
+  .drill-header .phase-badge {
+    background: var(--purple-dark);
+    color: white;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 20px;
+    white-space: nowrap;
+  }
+
+  .drill-header h2 {
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--purple-dark);
+    flex: 1;
+  }
+
+  .drill-header .timer-badge {
+    background: var(--red-accent);
+    color: white;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .timer-icon {
+    display: inline-block;
+  }
+
+  .timer-icon svg {
+    vertical-align: middle;
+  }
+
+  .instructions {
+    background: var(--purple-bg);
+    border-radius: 10px;
+    padding: 12px 16px;
+    margin-bottom: 16px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+
+  .instructions .icon {
+    font-size: 24px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .instructions p {
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  .instructions strong {
+    color: var(--purple-dark);
+  }
+
+  .story-box {
+    background: var(--purple-bg);
+    border-radius: 12px;
+    padding: 16px 18px;
+    border-left: 4px solid var(--purple-mid);
+    margin-bottom: 12px;
+  }
+
+  .story-box .read-aloud {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--purple-mid);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+  }
+
+  .story-box p {
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--text-dark);
+  }
+
+  .parent-note {
+    background: #FFF3E0;
+    border-radius: 8px;
+    padding: 10px 14px;
+    margin-top: 12px;
+    border: 1px solid #FFE0B2;
+  }
+
+  .parent-note .note-label {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--orange-accent);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .parent-note p {
+    font-size: 12px;
+    line-height: 1.5;
+    color: #5D4037;
+    margin-top: 3px;
+  }
+
+  .writing-prompt {
+    background: var(--purple-bg);
+    border-radius: 12px;
+    padding: 14px 20px;
+    margin: 12px 0 16px;
+    text-align: center;
+    border: 2px solid var(--purple-light);
+  }
+
+  .writing-prompt p {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--purple-dark);
+  }
+
+  .writing-prompt .sub {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--purple-mid);
+    margin-top: 4px;
+  }
+
+  .writing-line {
+    height: 40px;
+    border-bottom: 2px solid var(--gray-line);
+    position: relative;
+    margin-bottom: 2px;
+  }
+
+  .writing-line .midline {
+    position: absolute;
+    bottom: 16px;
+    left: 0;
+    right: 0;
+    border-bottom: 1px dashed #E0D0F0;
+  }
+
+  .score-section {
+    display: flex;
+    gap: 16px;
+    align-items: stretch;
+  }
+
+  .score-box {
+    flex: 1;
+    border: 2px solid var(--purple-light);
+    border-radius: 12px;
+    padding: 14px;
+    text-align: center;
+  }
+
+  .score-box .score-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--purple-mid);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+  }
+
+  .score-box .score-value {
+    font-size: 42px;
+    font-weight: 700;
+    color: var(--purple-dark);
+    line-height: 1;
+  }
+
+  .score-box .score-max {
+    font-size: 14px;
+    color: var(--purple-mid);
+    font-weight: 500;
+  }
+
+  .score-box.bonus {
+    background: #FFF8E1;
+    border-color: var(--yellow-accent);
+  }
+
+  .score-box.total {
+    background: var(--purple-bg);
+    border-color: var(--purple-mid);
+  }
+
+  .page-number {
+    position: absolute;
+    bottom: 20px;
+    right: 30px;
+    font-size: 12px;
+    color: var(--gray-line);
+    font-weight: 600;
+  }
+
+  .page-footer {
+    position: absolute;
+    bottom: 20px;
+    left: 30px;
+    font-size: 10px;
+    color: var(--gray-line);
+    font-weight: 500;
+  }
+
+  /* ---------- PAGE 1 SPECIFIC: WRONG LABELS ---------- */
+  .wrong-labels-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 16px;
+    margin: 16px 0;
+  }
+
+  .wrong-label-card {
+    border: 2px solid var(--purple-light);
+    border-radius: 14px;
+    overflow: hidden;
+    text-align: center;
+  }
+
+  .wrong-label-card .item-drawing {
+    background: var(--purple-bg);
+    padding: 14px;
+    min-height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .wrong-label-card .wrong-tag {
+    background: var(--red-accent);
+    color: white;
+    font-family: 'Caveat', cursive;
+    font-size: 22px;
+    padding: 6px 12px;
+    transform: rotate(-3deg);
+    display: inline-block;
+    border-radius: 4px;
+    margin: -10px auto 8px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .wrong-label-card .correct-area {
+    padding: 8px 14px 14px;
+  }
+
+  .wrong-label-card .correct-prompt {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--green-accent);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+  }
+
+  .wrong-label-card .correct-line {
+    border-bottom: 2px solid var(--gray-line);
+    height: 30px;
+    position: relative;
+  }
+
+  .wrong-label-card .correct-line .midline {
+    position: absolute;
+    bottom: 12px;
+    left: 0;
+    right: 0;
+    border-bottom: 1px dashed #E0D0F0;
+  }
+
+  /* ---------- PAGE 2: LETTER SPRINT ---------- */
+  .sprint-section {
+    margin-bottom: 20px;
+  }
+
+  .sprint-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+    padding: 8px 12px;
+    border: 2px solid var(--purple-light);
+    border-radius: 10px;
+  }
+
+  .sprint-row:nth-child(even) {
+    background: var(--purple-bg);
+  }
+
+  .sprint-letter {
+    font-size: 40px;
+    font-weight: 700;
+    color: var(--purple-dark);
+    width: 50px;
+    text-align: center;
+    flex-shrink: 0;
+  }
+
+  .sprint-line {
+    flex: 1;
+    height: 50px;
+    border-bottom: 2px solid var(--gray-line);
+    position: relative;
+  }
+
+  .sprint-line .midline {
+    position: absolute;
+    bottom: 20px;
+    left: 0;
+    right: 0;
+    border-bottom: 1px dashed #E0D0F0;
+  }
+
+  .sprint-record {
+    flex-shrink: 0;
+    width: 80px;
+    text-align: center;
+  }
+
+  .record-box {
+    border: 2px solid var(--gray-line);
+    border-radius: 8px;
+    padding: 4px 8px;
+    font-size: 11px;
+    color: var(--gray-line);
+    font-weight: 600;
+  }
+
+  .record-box .record-val {
+    font-size: 20px;
+    color: var(--purple-dark);
+    line-height: 1.2;
+  }
+
+  /* ---------- PAGE 3: KITCHEN WORDS ---------- */
+  .word-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 20px;
+  }
+
+  .word-card {
+    border: 2px solid var(--purple-light);
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    min-height: 80px;
+  }
+
+  .word-card .word-image {
+    width: 80px;
+    background: var(--purple-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-right: 2px solid var(--purple-light);
+    flex-shrink: 0;
+  }
+
+  .word-card .word-write {
+    flex: 1;
+    padding: 8px 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .word-card .word-number {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--purple-mid);
+    margin-bottom: 4px;
+  }
+
+  .word-write-line {
+    border-bottom: 2px solid var(--gray-line);
+    height: 36px;
+    position: relative;
+  }
+
+  .word-write-line .midline {
+    position: absolute;
+    bottom: 14px;
+    left: 0;
+    right: 0;
+    border-bottom: 1px dashed #E0D0F0;
+  }
+
+  /* ---------- PAGE 4: CHALLENGE ---------- */
+  .label-boxes {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 16px;
+    margin: 16px 0;
+  }
+
+  .label-box {
+    border: 3px solid var(--purple-mid);
+    border-radius: 12px;
+    overflow: hidden;
+    text-align: center;
+  }
+
+  .label-box .label-drawing {
+    background: var(--purple-bg);
+    padding: 16px;
+    min-height: 110px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .label-box .label-write-area {
+    padding: 10px;
+    background: white;
+    min-height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .label-write-line {
+    border-bottom: 2px solid var(--gray-line);
+    height: 32px;
+    width: 85%;
+    position: relative;
+  }
+
+  .label-write-line .midline {
+    position: absolute;
+    bottom: 12px;
+    left: 0;
+    right: 0;
+    border-bottom: 1px dashed #E0D0F0;
+  }
+
+  .bonus-section {
+    margin-top: 16px;
+    border: 2px dashed var(--yellow-accent);
+    border-radius: 12px;
+    padding: 16px;
+    background: #FFFDE7;
+  }
+
+  .bonus-section .bonus-label {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--orange-accent);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+  }
+
+  /* ---------- PAGE 5: PARENT GUIDE ---------- */
+  .timing-strip {
+    display: flex;
+    gap: 0;
+    margin: 14px 0;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 2px solid var(--purple-light);
+  }
+
+  .timing-block {
+    flex: 1;
+    padding: 12px;
+    text-align: center;
+  }
+
+  .timing-block:not(:last-child) {
+    border-right: 2px solid var(--purple-light);
+  }
+
+  .timing-block .t-phase {
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 3px;
+  }
+
+  .timing-block .t-time {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--purple-dark);
+  }
+
+  .timing-block .t-desc {
+    font-size: 11px;
+    color: #888;
+    margin-top: 2px;
+  }
+
+  .timing-block:nth-child(1) { background: #F3E5F5; }
+  .timing-block:nth-child(1) .t-phase { color: #9C27B0; }
+  .timing-block:nth-child(2) { background: #FFF3E0; }
+  .timing-block:nth-child(2) .t-phase { color: #FF9800; }
+  .timing-block:nth-child(3) { background: #E8F5E9; }
+  .timing-block:nth-child(3) .t-phase { color: #4CAF50; }
+
+  .script-box {
+    background: #F5F5F5;
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin: 10px 0;
+    border-left: 4px solid var(--purple-mid);
+  }
+
+  .script-box .script-label {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--purple-mid);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+  }
+
+  .script-box p {
+    font-size: 13px;
+    line-height: 1.6;
+  }
+
+  .guide-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 12px;
+  }
+
+  .guide-box {
+    border: 2px solid var(--purple-light);
+    border-radius: 12px;
+    padding: 14px;
+  }
+
+  .guide-box.do-box {
+    border-color: var(--green-accent);
+    background: #F1F8E9;
+  }
+
+  .guide-box.dont-box {
+    border-color: var(--red-accent);
+    background: #FFF3F0;
+  }
+
+  .guide-box h3 {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  .guide-box.do-box h3 { color: var(--green-accent); }
+  .guide-box.dont-box h3 { color: var(--red-accent); }
+
+  .guide-box ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  .guide-box li {
+    font-size: 13px;
+    line-height: 1.5;
+    padding: 3px 0;
+    padding-left: 18px;
+    position: relative;
+  }
+
+  .guide-box.do-box li::before {
+    content: "\2713";
+    position: absolute;
+    left: 0;
+    color: var(--green-accent);
+    font-weight: 700;
+  }
+
+  .guide-box.dont-box li::before {
+    content: "\2717";
+    position: absolute;
+    left: 0;
+    color: var(--red-accent);
+    font-weight: 700;
+  }
+</style>
+</head>
+<body>
+
+<!-- ============================================================ -->
+<!-- PAGE 1: COVER & STORY                                        -->
+<!-- ============================================================ -->
+<div class="page">
+
+  <div class="cover-header">
+    <div class="series-title">Monster Letters</div>
+    <h1>The Kitchen Labels</h1>
+    <div class="day-label">Day 2 &bull; Week 1</div>
+  </div>
+
+  <div style="display: flex; gap: 20px; align-items: flex-start; margin-bottom: 12px;">
+    <div style="flex: 1;">
+      <div class="story-box">
+        <div class="read-aloud">&#x1F4D6; Read aloud</div>
+        <p>Scribble says <strong>thanks for writing back!</strong> Today he needs help with the kitchen. He tried to label things himself, but look what happened...</p>
+        <p style="margin-top:8px;">He stuck <strong>"WINDOW"</strong> on the stove, <strong>"CHAIR"</strong> on the sink, and <strong>"DOG"</strong> on a cup. A DOG! That's not even a thing in a kitchen!</p>
+      </div>
+    </div>
+
+    <!-- Small Scribble with chef hat -->
+    <div style="flex: 0 0 150px;">
+      <svg viewBox="0 0 150 180" xmlns="http://www.w3.org/2000/svg" width="150" height="180">
+        <!-- Chef hat -->
+        <ellipse cx="75" cy="42" rx="32" ry="28" fill="white" stroke="#DDD" stroke-width="1.5"/>
+        <rect x="50" y="40" width="50" height="16" rx="2" fill="white" stroke="#DDD" stroke-width="1.5"/>
+        <circle cx="65" cy="30" r="12" fill="white"/>
+        <circle cx="85" cy="30" r="12" fill="white"/>
+        <circle cx="75" cy="24" r="10" fill="white"/>
+        <!-- Body -->
+        <ellipse cx="75" cy="110" rx="48" ry="45" fill="#9B6DD7"/>
+        <!-- Fur bumps -->
+        <circle cx="30" cy="95" r="9" fill="#8B5DC7"/>
+        <circle cx="28" cy="112" r="8" fill="#8B5DC7"/>
+        <circle cx="30" cy="130" r="9" fill="#8B5DC7"/>
+        <circle cx="40" cy="145" r="8" fill="#8B5DC7"/>
+        <circle cx="120" cy="95" r="9" fill="#8B5DC7"/>
+        <circle cx="122" cy="112" r="8" fill="#8B5DC7"/>
+        <circle cx="120" cy="130" r="9" fill="#8B5DC7"/>
+        <circle cx="110" cy="145" r="8" fill="#8B5DC7"/>
+        <circle cx="55" cy="155" r="7" fill="#8B5DC7"/>
+        <circle cx="75" cy="158" r="8" fill="#8B5DC7"/>
+        <circle cx="95" cy="155" r="7" fill="#8B5DC7"/>
+        <circle cx="45" cy="72" r="7" fill="#8B5DC7"/>
+        <circle cx="75" cy="67" r="8" fill="#8B5DC7"/>
+        <circle cx="105" cy="72" r="7" fill="#8B5DC7"/>
+        <!-- Inner body -->
+        <ellipse cx="75" cy="112" rx="36" ry="34" fill="#A980DE"/>
+        <!-- Eyes -->
+        <ellipse cx="62" cy="100" rx="12" ry="14" fill="white"/>
+        <ellipse cx="88" cy="100" rx="12" ry="14" fill="white"/>
+        <circle cx="65" cy="102" r="7" fill="#2D1B4E"/>
+        <circle cx="91" cy="102" r="7" fill="#2D1B4E"/>
+        <circle cx="68" cy="98" r="2.5" fill="white"/>
+        <circle cx="94" cy="98" r="2.5" fill="white"/>
+        <!-- Confused/embarrassed smile -->
+        <path d="M 60 125 Q 75 135 90 125" stroke="#2D1B4E" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        <!-- Sweat drop (embarrassed) -->
+        <path d="M 115 85 Q 118 78 121 85 Q 118 90 115 85 Z" fill="#90CAF9"/>
+        <!-- Arms holding a label -->
+        <path d="M 30 110 Q 15 105 10 98" stroke="#8B5DC7" stroke-width="6" fill="none" stroke-linecap="round"/>
+        <circle cx="8" cy="96" r="4" fill="#8B5DC7"/>
+        <path d="M 120 110 Q 135 105 140 98" stroke="#8B5DC7" stroke-width="6" fill="none" stroke-linecap="round"/>
+        <circle cx="142" cy="96" r="4" fill="#8B5DC7"/>
+        <!-- Little label in hand that says "DOG" -->
+        <rect x="128" y="82" width="30" height="16" rx="2" fill="#FFFDE7" stroke="#FFB74D" stroke-width="1" transform="rotate(10, 143, 90)"/>
+        <text x="143" y="93" font-family="Caveat, cursive" font-size="10" fill="#5D4037" text-anchor="middle" transform="rotate(10, 143, 90)">DOG</text>
+        <!-- Feet -->
+        <ellipse cx="58" cy="158" rx="12" ry="6" fill="#7B4DB7"/>
+        <ellipse cx="92" cy="158" rx="12" ry="6" fill="#7B4DB7"/>
+      </svg>
+    </div>
+  </div>
+
+  <!-- The wrong labels showcase -->
+  <p style="font-size: 15px; font-weight: 600; color: var(--purple-dark); margin-bottom: 10px;">Scribble's wrong labels:</p>
+
+  <div class="wrong-labels-grid">
+    <!-- Stove with "WINDOW" label -->
+    <div class="wrong-label-card">
+      <div class="item-drawing">
+        <svg viewBox="0 0 100 90" width="90" height="80">
+          <!-- Stove body -->
+          <rect x="10" y="30" width="80" height="50" rx="4" fill="#E8D5F5" stroke="#9B6DD7" stroke-width="2"/>
+          <!-- Burners -->
+          <circle cx="32" cy="24" r="10" fill="none" stroke="#9B6DD7" stroke-width="2"/>
+          <circle cx="32" cy="24" r="5" fill="none" stroke="#9B6DD7" stroke-width="1"/>
+          <circle cx="68" cy="24" r="10" fill="none" stroke="#9B6DD7" stroke-width="2"/>
+          <circle cx="68" cy="24" r="5" fill="none" stroke="#9B6DD7" stroke-width="1"/>
+          <!-- Oven door -->
+          <rect x="18" y="42" width="64" height="30" rx="2" fill="white" stroke="#9B6DD7" stroke-width="1.5"/>
+          <circle cx="76" cy="57" r="3" fill="#9B6DD7" opacity="0.4"/>
+          <!-- Knobs -->
+          <circle cx="20" cy="34" r="3" fill="#9B6DD7"/>
+          <circle cx="35" cy="34" r="3" fill="#9B6DD7"/>
+          <circle cx="65" cy="34" r="3" fill="#9B6DD7"/>
+          <circle cx="80" cy="34" r="3" fill="#9B6DD7"/>
+        </svg>
+      </div>
+      <div class="wrong-tag">WINDOW</div>
+      <div class="correct-area">
+        <div class="correct-prompt">Write the right label:</div>
+        <div class="correct-line"><div class="midline"></div></div>
+      </div>
+    </div>
+
+    <!-- Sink with "CHAIR" label -->
+    <div class="wrong-label-card">
+      <div class="item-drawing">
+        <svg viewBox="0 0 100 90" width="90" height="80">
+          <!-- Sink basin -->
+          <path d="M 15 30 L 15 65 Q 15 75 25 75 L 75 75 Q 85 75 85 65 L 85 30" fill="#E8D5F5" stroke="#9B6DD7" stroke-width="2"/>
+          <!-- Counter edge -->
+          <line x1="8" y1="30" x2="92" y2="30" stroke="#9B6DD7" stroke-width="2.5" stroke-linecap="round"/>
+          <!-- Faucet -->
+          <rect x="46" y="10" width="8" height="20" rx="3" fill="#9B6DD7"/>
+          <path d="M 42 12 Q 50 5 58 12" stroke="#9B6DD7" stroke-width="3" fill="none" stroke-linecap="round"/>
+          <!-- Faucet spout -->
+          <path d="M 58 12 L 65 12 L 65 22" stroke="#9B6DD7" stroke-width="3" fill="none" stroke-linecap="round"/>
+          <!-- Water drops -->
+          <circle cx="65" cy="28" r="1.5" fill="#90CAF9"/>
+          <!-- Drain -->
+          <circle cx="50" cy="65" r="4" fill="#9B6DD7" opacity="0.3"/>
+        </svg>
+      </div>
+      <div class="wrong-tag">CHAIR</div>
+      <div class="correct-area">
+        <div class="correct-prompt">Write the right label:</div>
+        <div class="correct-line"><div class="midline"></div></div>
+      </div>
+    </div>
+
+    <!-- Cup with "DOG" label -->
+    <div class="wrong-label-card">
+      <div class="item-drawing">
+        <svg viewBox="0 0 100 90" width="90" height="80">
+          <!-- Cup body -->
+          <path d="M 25 20 L 28 70 H 58 L 61 20 Z" fill="#E8D5F5" stroke="#9B6DD7" stroke-width="2"/>
+          <!-- Handle -->
+          <path d="M 61 30 Q 78 30 78 45 Q 78 58 61 58" fill="none" stroke="#9B6DD7" stroke-width="2.5"/>
+          <!-- Rim -->
+          <path d="M 25 20 H 61" stroke="#9B6DD7" stroke-width="3" stroke-linecap="round"/>
+          <!-- Steam -->
+          <path d="M 35 15 Q 33 8 37 4" stroke="#9B6DD7" stroke-width="1.5" fill="none" opacity="0.3" stroke-linecap="round"/>
+          <path d="M 45 13 Q 43 6 47 2" stroke="#9B6DD7" stroke-width="1.5" fill="none" opacity="0.3" stroke-linecap="round"/>
+          <path d="M 55 15 Q 53 8 57 4" stroke="#9B6DD7" stroke-width="1.5" fill="none" opacity="0.3" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="wrong-tag">DOG</div>
+      <div class="correct-area">
+        <div class="correct-prompt">Write the right label:</div>
+        <div class="correct-line"><div class="midline"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="parent-note">
+    <div class="note-label">&#x1F9E9; For parents</div>
+    <p>Let him look at the pictures and laugh at how wrong the labels are. "A DOG? Where does Scribble see a dog?!" Then he writes the correct word below each one. This is a warm-up before the timed drills — low pressure, high silliness.</p>
+  </div>
+
+  <span class="page-footer">Monster Letters &bull; Day 2</span>
+  <span class="page-number">1</span>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 2: SPEED DRILL — LETTER SPRINT                          -->
+<!-- ============================================================ -->
+<div class="page">
+
+  <div class="drill-header">
+    <span class="phase-badge">Phase 2 &bull; Drill 1</span>
+    <h2>Letter Sprint</h2>
+    <span class="timer-badge">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="13" r="9"/><path d="M12 9v4l2.5 2.5"/><path d="M10 2h4"/></svg>
+      2 min
+    </span>
+  </div>
+
+  <div class="instructions">
+    <div class="icon">&#x1F3C3;</div>
+    <p>Pick <strong>3 letters that are tricky for you.</strong> Fill one whole line as fast as you can! Time each line — these are your <strong>records to beat</strong> later this week!</p>
+  </div>
+
+  <div class="sprint-section">
+    <div class="sprint-row">
+      <div class="sprint-letter" style="border: 2px dashed var(--gray-line); border-radius: 8px; font-size: 18px; color: var(--gray-line);">pick<br>one</div>
+      <div class="sprint-line"><div class="midline"></div></div>
+      <div class="sprint-record">
+        <div class="record-box">
+          <div style="font-size:9px; color: var(--purple-mid);">TIME</div>
+          <div class="record-val">&nbsp;</div>
+          <div style="font-size:9px;">sec</div>
+        </div>
+      </div>
+    </div>
+    <div class="sprint-row">
+      <div class="sprint-letter" style="border: 2px dashed var(--gray-line); border-radius: 8px; font-size: 18px; color: var(--gray-line);">pick<br>one</div>
+      <div class="sprint-line"><div class="midline"></div></div>
+      <div class="sprint-record">
+        <div class="record-box">
+          <div style="font-size:9px; color: var(--purple-mid);">TIME</div>
+          <div class="record-val">&nbsp;</div>
+          <div style="font-size:9px;">sec</div>
+        </div>
+      </div>
+    </div>
+    <div class="sprint-row">
+      <div class="sprint-letter" style="border: 2px dashed var(--gray-line); border-radius: 8px; font-size: 18px; color: var(--gray-line);">pick<br>one</div>
+      <div class="sprint-line"><div class="midline"></div></div>
+      <div class="sprint-record">
+        <div class="record-box">
+          <div style="font-size:9px; color: var(--purple-mid);">TIME</div>
+          <div class="record-val">&nbsp;</div>
+          <div style="font-size:9px;">sec</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="text-align: center; margin: 16px 0 8px;">
+    <svg viewBox="0 0 400 60" width="350" height="55">
+      <!-- Trophy / records banner -->
+      <rect x="80" y="5" width="240" height="50" rx="10" fill="var(--purple-bg)" stroke="var(--purple-light)" stroke-width="2"/>
+      <!-- Trophy icon -->
+      <path d="M 110 18 L 113 38 H 127 L 130 18 Z" fill="#FFD54F" stroke="#FFB74D" stroke-width="1.5"/>
+      <path d="M 110 18 H 130" stroke="#FFB74D" stroke-width="2" stroke-linecap="round"/>
+      <rect x="117" y="38" width="6" height="4" fill="#FFB74D"/>
+      <rect x="113" y="42" width="14" height="3" rx="1" fill="#FFB74D"/>
+      <path d="M 110 22 Q 100 22 100 28 Q 100 34 110 34" fill="none" stroke="#FFB74D" stroke-width="1.5"/>
+      <path d="M 130 22 Q 140 22 140 28 Q 140 34 130 34" fill="none" stroke="#FFB74D" stroke-width="1.5"/>
+      <text x="210" y="28" font-family="Fredoka, sans-serif" font-size="13" font-weight="600" fill="var(--purple-dark)" text-anchor="middle">Save these times!</text>
+      <text x="210" y="44" font-family="Fredoka, sans-serif" font-size="11" font-weight="500" fill="var(--purple-mid)" text-anchor="middle">You'll try to beat them on Day 5</text>
+    </svg>
+  </div>
+
+  <div class="parent-note">
+    <div class="note-label">&#x1F9E9; Which letters to pick</div>
+    <p>Common tricky letters for 1st graders: <strong>b, d, g, p, q, f, 5, 7, 9, S, J.</strong> Let him pick if he has a preference — ownership helps. If he says "none are tricky," pick b, d, and g (the classic reversal set). Write the chosen letter in the left box for him.</p>
+  </div>
+
+  <span class="page-footer">Monster Letters &bull; Day 2</span>
+  <span class="page-number">2</span>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 3: SPEED DRILL — KITCHEN WORDS                          -->
+<!-- ============================================================ -->
+<div class="page">
+
+  <div class="drill-header">
+    <span class="phase-badge">Phase 2 &bull; Drill 2</span>
+    <h2>Kitchen Words</h2>
+    <span class="timer-badge">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="13" r="9"/><path d="M12 9v4l2.5 2.5"/><path d="M10 2h4"/></svg>
+      5 min
+    </span>
+  </div>
+
+  <div class="instructions">
+    <div class="icon">&#x1F373;</div>
+    <p>A grown-up says the word. <strong>You write it!</strong> Sound it out and go fast. Don't worry about spelling — just get it down! Scribble spells things wrong ALL the time and he's doing fine.</p>
+  </div>
+
+  <div class="word-grid">
+    <!-- CUP -->
+    <div class="word-card">
+      <div class="word-image">
+        <svg viewBox="0 0 60 60" width="50" height="50">
+          <path d="M 16 18 L 19 48 H 37 L 40 18 Z" fill="#E8D5F5" stroke="#9B6DD7" stroke-width="2"/>
+          <path d="M 40 24 Q 52 24 52 33 Q 52 42 40 42" fill="none" stroke="#9B6DD7" stroke-width="2"/>
+          <path d="M 16 18 H 40" stroke="#9B6DD7" stroke-width="2.5" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="word-write">
+        <div class="word-number">#1</div>
+        <div class="word-write-line"><div class="midline"></div></div>
+      </div>
+    </div>
+
+    <!-- POT -->
+    <div class="word-card">
+      <div class="word-image">
+        <svg viewBox="0 0 60 60" width="50" height="50">
+          <path d="M 14 22 L 16 48 H 44 L 46 22 Z" fill="#E8D5F5" stroke="#9B6DD7" stroke-width="2"/>
+          <line x1="10" y1="22" x2="50" y2="22" stroke="#9B6DD7" stroke-width="2.5" stroke-linecap="round"/>
+          <!-- Handles -->
+          <line x1="10" y1="22" x2="5" y2="22" stroke="#9B6DD7" stroke-width="2.5" stroke-linecap="round"/>
+          <line x1="50" y1="22" x2="55" y2="22" stroke="#9B6DD7" stroke-width="2.5" stroke-linecap="round"/>
+          <!-- Lid -->
+          <path d="M 18 22 Q 30 14 42 22" fill="#E8D5F5" stroke="#9B6DD7" stroke-width="1.5"/>
+          <circle cx="30" cy="15" r="3" fill="#9B6DD7"/>
+        </svg>
+      </div>
+      <div class="word-write">
+        <div class="word-number">#2</div>
+        <div class="word-write-line"><div class="midline"></div></div>
+      </div>
+    </div>
+
+    <!-- PAN -->
+    <div class="word-card">
+      <div class="word-image">
+        <svg viewBox="0 0 60 60" width="50" height="50">
+          <ellipse cx="24" cy="36" rx="18" ry="10" fill="#E8D5F5" stroke="#9B6DD7" stroke-width="2"/>
+          <line x1="42" y1="36" x2="58" y2="30" stroke="#9B6DD7" stroke-width="3" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="word-write">
+        <div class="word-number">#3</div>
+        <div class="word-write-line"><div class="midline"></div></div>
+      </div>
+    </div>
+
+    <!-- LID -->
+    <div class="word-card">
+      <div class="word-image">
+        <svg viewBox="0 0 60 60" width="50" height="50">
+          <path d="M 10 38 Q 30 24 50 38" fill="#E8D5F5" stroke="#9B6DD7" stroke-width="2"/>
+          <line x1="8" y1="38" x2="52" y2="38" stroke="#9B6DD7" stroke-width="2.5" stroke-linecap="round"/>
+          <circle cx="30" cy="28" r="3.5" fill="#9B6DD7"/>
+        </svg>
+      </div>
+      <div class="word-write">
+        <div class="word-number">#4</div>
+        <div class="word-write-line"><div class="midline"></div></div>
+      </div>
+    </div>
+
+    <!-- JAR -->
+    <div class="word-card">
+      <div class="word-image">
+        <svg viewBox="0 0 60 60" width="50" height="50">
+          <rect x="16" y="20" width="28" height="32" rx="4" fill="#E8D5F5" stroke="#9B6DD7" stroke-width="2"/>
+          <rect x="20" y="14" width="20" height="8" rx="2" fill="white" stroke="#9B6DD7" stroke-width="1.5"/>
+          <!-- Label on jar -->
+          <rect x="20" y="30" width="20" height="12" rx="1" fill="white" stroke="#9B6DD7" stroke-width="1" opacity="0.6"/>
+        </svg>
+      </div>
+      <div class="word-write">
+        <div class="word-number">#5</div>
+        <div class="word-write-line"><div class="midline"></div></div>
+      </div>
+    </div>
+
+    <!-- MUG -->
+    <div class="word-card">
+      <div class="word-image">
+        <svg viewBox="0 0 60 60" width="50" height="50">
+          <rect x="14" y="18" width="24" height="30" rx="3" fill="#E8D5F5" stroke="#9B6DD7" stroke-width="2"/>
+          <path d="M 38 24 Q 50 24 50 33 Q 50 42 38 42" fill="none" stroke="#9B6DD7" stroke-width="2.5"/>
+        </svg>
+      </div>
+      <div class="word-write">
+        <div class="word-number">#6</div>
+        <div class="word-write-line"><div class="midline"></div></div>
+      </div>
+    </div>
+
+    <!-- DISH -->
+    <div class="word-card">
+      <div class="word-image">
+        <svg viewBox="0 0 60 60" width="50" height="50">
+          <ellipse cx="30" cy="36" rx="24" ry="8" fill="none" stroke="#9B6DD7" stroke-width="2"/>
+          <path d="M 6 36 Q 6 42 30 44 Q 54 42 54 36" fill="#E8D5F5" stroke="#9B6DD7" stroke-width="2"/>
+          <ellipse cx="30" cy="36" rx="16" ry="4" fill="none" stroke="#9B6DD7" stroke-width="1" opacity="0.4"/>
+        </svg>
+      </div>
+      <div class="word-write">
+        <div class="word-number">#7</div>
+        <div class="word-write-line"><div class="midline"></div></div>
+      </div>
+    </div>
+
+    <!-- FORK -->
+    <div class="word-card">
+      <div class="word-image">
+        <svg viewBox="0 0 60 60" width="50" height="50">
+          <line x1="30" y1="55" x2="30" y2="20" stroke="#9B6DD7" stroke-width="2.5" stroke-linecap="round"/>
+          <line x1="22" y1="8" x2="22" y2="26" stroke="#9B6DD7" stroke-width="2" stroke-linecap="round"/>
+          <line x1="30" y1="8" x2="30" y2="26" stroke="#9B6DD7" stroke-width="2" stroke-linecap="round"/>
+          <line x1="38" y1="8" x2="38" y2="26" stroke="#9B6DD7" stroke-width="2" stroke-linecap="round"/>
+          <path d="M 22 26 Q 30 32 38 26" stroke="#9B6DD7" stroke-width="2" fill="none"/>
+        </svg>
+      </div>
+      <div class="word-write">
+        <div class="word-number">#8</div>
+        <div class="word-write-line"><div class="midline"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCORING -->
+  <div class="score-section">
+    <div class="score-box">
+      <div class="score-label">Words Tried</div>
+      <div class="score-value">&nbsp;</div>
+      <div class="score-max">out of 8</div>
+    </div>
+    <div class="score-box bonus">
+      <div class="score-label">Bonus (readable)</div>
+      <div class="score-value">&nbsp;</div>
+      <div class="score-max">out of 8</div>
+    </div>
+    <div class="score-box total">
+      <div class="score-label">Day 2 Total</div>
+      <div class="score-value">&nbsp;</div>
+      <div class="score-max">out of 16</div>
+    </div>
+  </div>
+
+  <div class="parent-note" style="margin-top: 14px;">
+    <div class="note-label">&#x1F4CA; Compare to Day 1</div>
+    <p>If you saved Day 1's score, mention it: "Yesterday you got ___! Let's see what happens today." Don't push — just plant the seed that scores go up over time.</p>
+  </div>
+
+  <span class="page-footer">Monster Letters &bull; Day 2</span>
+  <span class="page-number">3</span>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 4: CHALLENGE — FIX THE LABELS + ADVICE                  -->
+<!-- ============================================================ -->
+<div class="page">
+
+  <div class="drill-header">
+    <span class="phase-badge">Phase 3</span>
+    <h2>Fix Scribble's Kitchen!</h2>
+    <span class="timer-badge">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="13" r="9"/><path d="M12 9v4l2.5 2.5"/><path d="M10 2h4"/></svg>
+      5 min
+    </span>
+  </div>
+
+  <div class="instructions">
+    <div class="icon">&#x1F3F7;&#xFE0F;</div>
+    <p>Write the <strong>correct label</strong> for each thing in Scribble's kitchen. Make them big and clear so Scribble can read them!</p>
+  </div>
+
+  <div class="label-boxes">
+    <!-- Stove -->
+    <div class="label-box">
+      <div class="label-drawing">
+        <svg viewBox="0 0 100 90" width="85" height="75">
+          <rect x="10" y="30" width="80" height="50" rx="4" fill="#E8D5F5" stroke="#9B6DD7" stroke-width="2"/>
+          <circle cx="32" cy="24" r="10" fill="none" stroke="#9B6DD7" stroke-width="2"/>
+          <circle cx="32" cy="24" r="5" fill="none" stroke="#9B6DD7" stroke-width="1"/>
+          <circle cx="68" cy="24" r="10" fill="none" stroke="#9B6DD7" stroke-width="2"/>
+          <circle cx="68" cy="24" r="5" fill="none" stroke="#9B6DD7" stroke-width="1"/>
+          <rect x="18" y="42" width="64" height="30" rx="2" fill="white" stroke="#9B6DD7" stroke-width="1.5"/>
+          <circle cx="76" cy="57" r="3" fill="#9B6DD7" opacity="0.4"/>
+          <circle cx="20" cy="34" r="3" fill="#9B6DD7"/>
+          <circle cx="35" cy="34" r="3" fill="#9B6DD7"/>
+          <circle cx="65" cy="34" r="3" fill="#9B6DD7"/>
+          <circle cx="80" cy="34" r="3" fill="#9B6DD7"/>
+        </svg>
+      </div>
+      <div class="label-write-area">
+        <div class="label-write-line"><div class="midline"></div></div>
+      </div>
+    </div>
+
+    <!-- Sink -->
+    <div class="label-box">
+      <div class="label-drawing">
+        <svg viewBox="0 0 100 90" width="85" height="75">
+          <path d="M 15 30 L 15 65 Q 15 75 25 75 L 75 75 Q 85 75 85 65 L 85 30" fill="#E8D5F5" stroke="#9B6DD7" stroke-width="2"/>
+          <line x1="8" y1="30" x2="92" y2="30" stroke="#9B6DD7" stroke-width="2.5" stroke-linecap="round"/>
+          <rect x="46" y="10" width="8" height="20" rx="3" fill="#9B6DD7"/>
+          <path d="M 42 12 Q 50 5 58 12" stroke="#9B6DD7" stroke-width="3" fill="none" stroke-linecap="round"/>
+          <path d="M 58 12 L 65 12 L 65 22" stroke="#9B6DD7" stroke-width="3" fill="none" stroke-linecap="round"/>
+          <circle cx="65" cy="28" r="1.5" fill="#90CAF9"/>
+          <circle cx="50" cy="65" r="4" fill="#9B6DD7" opacity="0.3"/>
+        </svg>
+      </div>
+      <div class="label-write-area">
+        <div class="label-write-line"><div class="midline"></div></div>
+      </div>
+    </div>
+
+    <!-- Cup -->
+    <div class="label-box">
+      <div class="label-drawing">
+        <svg viewBox="0 0 100 90" width="85" height="75">
+          <path d="M 25 20 L 28 70 H 58 L 61 20 Z" fill="#E8D5F5" stroke="#9B6DD7" stroke-width="2"/>
+          <path d="M 61 30 Q 78 30 78 45 Q 78 58 61 58" fill="none" stroke="#9B6DD7" stroke-width="2.5"/>
+          <path d="M 25 20 H 61" stroke="#9B6DD7" stroke-width="3" stroke-linecap="round"/>
+          <path d="M 35 15 Q 33 8 37 4" stroke="#9B6DD7" stroke-width="1.5" fill="none" opacity="0.3" stroke-linecap="round"/>
+          <path d="M 45 13 Q 43 6 47 2" stroke="#9B6DD7" stroke-width="1.5" fill="none" opacity="0.3" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="label-write-area">
+        <div class="label-write-line"><div class="midline"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bonus: Advice for Scribble -->
+  <div class="bonus-section">
+    <div class="bonus-label">&#x2B50; Bonus: Advice for Scribble</div>
+    <p style="font-size: 14px; margin-bottom: 10px;">Finished the labels? Write Scribble <strong>one sentence</strong> of advice about his kitchen.</p>
+    <div class="writing-line"><div class="midline"></div></div>
+    <div class="writing-line"><div class="midline"></div></div>
+    <div class="writing-line"><div class="midline"></div></div>
+  </div>
+
+  <div style="margin-top: 14px; display: flex; justify-content: flex-end;">
+    <!-- Small Scribble giving thumbs up -->
+    <svg viewBox="0 0 90 80" width="80" height="70">
+      <ellipse cx="45" cy="45" rx="30" ry="28" fill="#9B6DD7"/>
+      <circle cx="18" cy="35" r="7" fill="#8B5DC7"/>
+      <circle cx="72" cy="35" r="7" fill="#8B5DC7"/>
+      <circle cx="18" cy="52" r="6" fill="#8B5DC7"/>
+      <circle cx="72" cy="52" r="6" fill="#8B5DC7"/>
+      <circle cx="30" cy="22" r="5" fill="#8B5DC7"/>
+      <circle cx="45" cy="19" r="6" fill="#8B5DC7"/>
+      <circle cx="60" cy="22" r="5" fill="#8B5DC7"/>
+      <ellipse cx="45" cy="46" rx="22" ry="20" fill="#A980DE"/>
+      <ellipse cx="37" cy="40" rx="8" ry="9" fill="white"/>
+      <ellipse cx="53" cy="40" rx="8" ry="9" fill="white"/>
+      <circle cx="39" cy="41" r="5" fill="#2D1B4E"/>
+      <circle cx="55" cy="41" r="5" fill="#2D1B4E"/>
+      <circle cx="41" cy="38" r="2" fill="white"/>
+      <circle cx="57" cy="38" r="2" fill="white"/>
+      <path d="M 35 55 Q 45 62 55 55" stroke="#2D1B4E" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <!-- Thumbs up arm -->
+      <path d="M 72 42 Q 82 38 85 32" stroke="#8B5DC7" stroke-width="5" fill="none" stroke-linecap="round"/>
+      <ellipse cx="86" cy="28" rx="5" ry="7" fill="#8B5DC7"/>
+    </svg>
+  </div>
+
+  <span class="page-footer">Monster Letters &bull; Day 2</span>
+  <span class="page-number">4</span>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 5: PARENT GUIDE                                         -->
+<!-- ============================================================ -->
+<div class="page">
+
+  <div class="drill-header">
+    <span class="phase-badge">For Parents</span>
+    <h2>Day 2 Guide</h2>
+  </div>
+
+  <div class="timing-strip">
+    <div class="timing-block">
+      <div class="t-phase">Phase 1</div>
+      <div class="t-time">2 min</div>
+      <div class="t-desc">Story + wrong labels</div>
+    </div>
+    <div class="timing-block">
+      <div class="t-phase">Phase 2</div>
+      <div class="t-time">7 min</div>
+      <div class="t-desc">Sprint + kitchen words</div>
+    </div>
+    <div class="timing-block">
+      <div class="t-phase">Phase 3</div>
+      <div class="t-time">5 min</div>
+      <div class="t-desc">Fix labels + advice</div>
+    </div>
+  </div>
+
+  <div class="script-box">
+    <div class="script-label">What's new today</div>
+    <p><strong>Letter Sprint with records:</strong> Today introduces timed records he'll try to beat on Day 5. Pick 3 letters he finds tricky (or use b, d, g as defaults). Write the chosen letter in the left box for him. Time each line with a phone stopwatch and write the time in the circle. These numbers matter — they're his "before" snapshot.</p>
+  </div>
+
+  <div class="script-box">
+    <div class="script-label">Phase 1 — Story tips</div>
+    <p>The wrong-labels page (page 1) IS the story. Let him look at the pictures, read the wrong labels, and react. Ham it up: "He put DOG on the cup? Does Scribble even know what a dog is?!" Writing the correct labels on page 1 is a gentle warm-up before the timed drills.</p>
+  </div>
+
+  <div class="script-box">
+    <div class="script-label">Phase 2 — Kitchen Words dictation</div>
+    <p>Same format as Day 1's Label Blitz. Say the word, he writes it. Today's words are all kitchen items: CUP, POT, PAN, LID, JAR, MUG, DISH, FORK. "DISH" and "FORK" are 4 letters — a small step up. If he nails those, call it out: "Four-letter words! Nice!"</p>
+  </div>
+
+  <div class="script-box">
+    <div class="script-label">Phase 3 — The challenge</div>
+    <p>Page 4 has the three big label boxes where he writes STOVE, SINK, and CUP in clear, label-sized writing. If he finishes early, the bonus section asks for one sentence of kitchen advice to Scribble. If he doesn't get to the bonus, no problem — it's a bonus.</p>
+  </div>
+
+  <div class="guide-grid">
+    <div class="guide-box do-box">
+      <h3>Day 2 Wins</h3>
+      <ul>
+        <li>He laughed at the wrong labels</li>
+        <li>He attempted all 8 kitchen words</li>
+        <li>You have 3 letter-sprint times recorded</li>
+        <li>He wrote at least one label on page 4</li>
+        <li>Session stayed under 15 minutes</li>
+      </ul>
+    </div>
+    <div class="guide-box dont-box">
+      <h3>Watch for</h3>
+      <ul>
+        <li>Erasing during the sprint — remind: "no erasing in speed rounds!"</li>
+        <li>Getting stuck on a word — say "skip it, next one!" after 20 sec</li>
+        <li>Comparing to Day 1 negatively — only compare scores UP</li>
+        <li>Wanting to "redo" a label to make it neater — it's done, move on!</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="parent-note" style="margin-top: 14px;">
+    <div class="note-label">&#x1F4AC; Looking ahead</div>
+    <p><strong>Tomorrow (Day 3)</strong> introduces Speedster! Everything gets faster and sillier — scrambled words, speed races, and a monster who writes SO fast nobody can read it. If your son enjoyed today's timer, he'll love tomorrow.</p>
+  </div>
+
+  <span class="page-footer">Monster Letters &bull; Day 2</span>
+  <span class="page-number">5</span>
+</div>
+
+</body>
+</html>
