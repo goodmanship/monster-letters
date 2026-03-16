@@ -1,0 +1,1455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Monster Letters — Day 5: The Monster Party</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Patrick+Hand&family=Caveat:wght@700&display=swap');
+
+  :root {
+    --purple-dark: #6B3FA0;
+    --purple-mid: #9B6DD7;
+    --purple-light: #E8D5F5;
+    --purple-bg: #F5EEFA;
+    --green-accent: #4CAF50;
+    --orange-accent: #FF9800;
+    --yellow-accent: #FFD54F;
+    --red-accent: #EF5350;
+    --gray-line: #CCBBDD;
+    --gray-light: #F0F0F0;
+    --text-dark: #2D1B4E;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Fredoka', sans-serif;
+    color: var(--text-dark);
+    background: #FAFAFA;
+  }
+
+  @media print {
+    body { background: white; }
+    .page {
+      page-break-after: always;
+      box-shadow: none !important;
+      margin: 0 !important;
+      border-radius: 0 !important;
+    }
+    .page:last-child { page-break-after: avoid; }
+    .no-print { display: none !important; }
+    @page { margin: 0.5in; size: letter; }
+  }
+
+  @media screen {
+    body { padding: 20px; background: #E8D5F5; }
+    .page {
+      max-width: 8.5in;
+      margin: 30px auto;
+      box-shadow: 0 4px 20px rgba(107, 63, 160, 0.2);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+  }
+
+  .page {
+    width: 8.5in;
+    min-height: 10in;
+    background: white;
+    padding: 0.5in;
+    position: relative;
+  }
+
+  /* ---------- SHARED COMPONENTS ---------- */
+  .cover-header {
+    text-align: center;
+    margin-bottom: 15px;
+  }
+
+  .cover-header .series-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--purple-mid);
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-bottom: 2px;
+  }
+
+  .cover-header h1 {
+    font-size: 38px;
+    font-weight: 700;
+    color: var(--purple-dark);
+    line-height: 1.1;
+    margin-bottom: 2px;
+  }
+
+  .cover-header .day-label {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--purple-mid);
+  }
+
+  .drill-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 3px solid var(--purple-light);
+  }
+
+  .drill-header .phase-badge {
+    background: var(--purple-dark);
+    color: white;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 20px;
+    white-space: nowrap;
+  }
+
+  .drill-header h2 {
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--purple-dark);
+    flex: 1;
+  }
+
+  .drill-header .timer-badge {
+    background: var(--red-accent);
+    color: white;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .timer-icon {
+    display: inline-block;
+  }
+
+  .timer-icon svg {
+    vertical-align: middle;
+  }
+
+  .instructions {
+    background: var(--purple-bg);
+    border-radius: 10px;
+    padding: 12px 16px;
+    margin-bottom: 16px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+
+  .instructions .icon {
+    font-size: 24px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .instructions p {
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  .instructions strong {
+    color: var(--purple-dark);
+  }
+
+  .story-box {
+    background: var(--purple-bg);
+    border-radius: 12px;
+    padding: 16px 18px;
+    border-left: 4px solid var(--purple-mid);
+    margin-bottom: 12px;
+  }
+
+  .story-box .read-aloud {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--purple-mid);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+  }
+
+  .story-box p {
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--text-dark);
+  }
+
+  .parent-note {
+    background: #FFF3E0;
+    border-radius: 8px;
+    padding: 10px 14px;
+    margin-top: 12px;
+    border: 1px solid #FFE0B2;
+  }
+
+  .parent-note .note-label {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--orange-accent);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .parent-note p {
+    font-size: 12px;
+    line-height: 1.5;
+    color: #5D4037;
+    margin-top: 3px;
+  }
+
+  .writing-prompt {
+    background: var(--purple-bg);
+    border-radius: 12px;
+    padding: 14px 20px;
+    margin: 12px 0 16px;
+    text-align: center;
+    border: 2px solid var(--purple-light);
+  }
+
+  .writing-prompt p {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--purple-dark);
+  }
+
+  .writing-prompt .sub {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--purple-mid);
+    margin-top: 4px;
+  }
+
+  .writing-line {
+    height: 40px;
+    border-bottom: 2px solid var(--gray-line);
+    position: relative;
+    margin-bottom: 2px;
+  }
+
+  .writing-line .midline {
+    position: absolute;
+    bottom: 16px;
+    left: 0;
+    right: 0;
+    border-bottom: 1px dashed #E0D0F0;
+  }
+
+  .score-section {
+    display: flex;
+    gap: 16px;
+    align-items: stretch;
+  }
+
+  .score-box {
+    flex: 1;
+    border: 2px solid var(--purple-light);
+    border-radius: 12px;
+    padding: 14px;
+    text-align: center;
+  }
+
+  .score-box .score-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--purple-mid);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+  }
+
+  .score-box .score-value {
+    font-size: 42px;
+    font-weight: 700;
+    color: var(--purple-dark);
+    line-height: 1;
+  }
+
+  .score-box .score-max {
+    font-size: 14px;
+    color: var(--purple-mid);
+    font-weight: 500;
+  }
+
+  .score-box.bonus {
+    background: #FFF8E1;
+    border-color: var(--yellow-accent);
+  }
+
+  .score-box.total {
+    background: var(--purple-bg);
+    border-color: var(--purple-mid);
+  }
+
+  .page-number {
+    position: absolute;
+    bottom: 20px;
+    right: 30px;
+    font-size: 12px;
+    color: var(--gray-line);
+    font-weight: 600;
+  }
+
+  .page-footer {
+    position: absolute;
+    bottom: 20px;
+    left: 30px;
+    font-size: 10px;
+    color: var(--gray-line);
+    font-weight: 500;
+  }
+
+  /* ---------- PAGE 2: RECORD ATTEMPT SPRINT ---------- */
+  .sprint-section {
+    margin-bottom: 20px;
+  }
+
+  .sprint-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+    padding: 8px 12px;
+    border: 2px solid var(--purple-light);
+    border-radius: 10px;
+  }
+
+  .sprint-row:nth-child(even) {
+    background: var(--purple-bg);
+  }
+
+  .sprint-letter {
+    font-size: 40px;
+    font-weight: 700;
+    color: var(--purple-dark);
+    width: 50px;
+    text-align: center;
+    flex-shrink: 0;
+  }
+
+  .sprint-line {
+    flex: 1;
+    height: 50px;
+    border-bottom: 2px solid var(--gray-line);
+    position: relative;
+  }
+
+  .sprint-line .midline {
+    position: absolute;
+    bottom: 20px;
+    left: 0;
+    right: 0;
+    border-bottom: 1px dashed #E0D0F0;
+  }
+
+  .sprint-record {
+    flex-shrink: 0;
+    width: 80px;
+    text-align: center;
+  }
+
+  .record-box {
+    border: 2px solid var(--gray-line);
+    border-radius: 8px;
+    padding: 4px 8px;
+    font-size: 11px;
+    color: var(--gray-line);
+    font-weight: 600;
+  }
+
+  .record-box .record-val {
+    font-size: 20px;
+    color: var(--purple-dark);
+    line-height: 1.2;
+  }
+
+  .record-box.today-record {
+    border-color: var(--green-accent);
+    background: #F1F8E9;
+  }
+
+  .record-box.today-record .record-val {
+    color: var(--green-accent);
+  }
+
+  /* ---------- PAGE 3: PARTY WORDS ---------- */
+  .word-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 20px;
+  }
+
+  .word-card {
+    border: 2px solid var(--purple-light);
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    min-height: 80px;
+  }
+
+  .word-card .word-image {
+    width: 80px;
+    background: var(--purple-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-right: 2px solid var(--purple-light);
+    flex-shrink: 0;
+  }
+
+  .word-card .word-write {
+    flex: 1;
+    padding: 8px 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .word-card .word-number {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--purple-mid);
+    margin-bottom: 4px;
+  }
+
+  .word-write-line {
+    border-bottom: 2px solid var(--gray-line);
+    height: 36px;
+    position: relative;
+  }
+
+  .word-write-line .midline {
+    position: absolute;
+    bottom: 14px;
+    left: 0;
+    right: 0;
+    border-bottom: 1px dashed #E0D0F0;
+  }
+
+  /* ---------- PAGE 4: CHALLENGE ---------- */
+  .bonus-section {
+    margin-top: 16px;
+    border: 2px dashed var(--yellow-accent);
+    border-radius: 12px;
+    padding: 16px;
+    background: #FFFDE7;
+  }
+
+  .bonus-section .bonus-label {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--orange-accent);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+  }
+
+  .choice-section {
+    border: 3px solid var(--purple-mid);
+    border-radius: 14px;
+    padding: 16px;
+    margin-bottom: 16px;
+    position: relative;
+  }
+
+  .choice-section .choice-badge {
+    position: absolute;
+    top: -12px;
+    left: 16px;
+    background: var(--purple-dark);
+    color: white;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 3px 14px;
+    border-radius: 20px;
+  }
+
+  .choice-section h3 {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--purple-dark);
+    margin-bottom: 8px;
+    margin-top: 4px;
+  }
+
+  .big-write-area {
+    border: 3px solid var(--gray-line);
+    border-radius: 12px;
+    min-height: 100px;
+    margin-top: 8px;
+    position: relative;
+    background: white;
+  }
+
+  .big-write-area .midline {
+    position: absolute;
+    top: 50%;
+    left: 12px;
+    right: 12px;
+    border-bottom: 1px dashed #E0D0F0;
+  }
+
+  /* ---------- PAGE 5: PARENT GUIDE ---------- */
+  .timing-strip {
+    display: flex;
+    gap: 0;
+    margin: 14px 0;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 2px solid var(--purple-light);
+  }
+
+  .timing-block {
+    flex: 1;
+    padding: 12px;
+    text-align: center;
+  }
+
+  .timing-block:not(:last-child) {
+    border-right: 2px solid var(--purple-light);
+  }
+
+  .timing-block .t-phase {
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 3px;
+  }
+
+  .timing-block .t-time {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--purple-dark);
+  }
+
+  .timing-block .t-desc {
+    font-size: 11px;
+    color: #888;
+    margin-top: 2px;
+  }
+
+  .timing-block:nth-child(1) { background: #F3E5F5; }
+  .timing-block:nth-child(1) .t-phase { color: #9C27B0; }
+  .timing-block:nth-child(2) { background: #FFF3E0; }
+  .timing-block:nth-child(2) .t-phase { color: #FF9800; }
+  .timing-block:nth-child(3) { background: #E8F5E9; }
+  .timing-block:nth-child(3) .t-phase { color: #4CAF50; }
+
+  .script-box {
+    background: #F5F5F5;
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin: 10px 0;
+    border-left: 4px solid var(--purple-mid);
+  }
+
+  .script-box .script-label {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--purple-mid);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+  }
+
+  .script-box p {
+    font-size: 13px;
+    line-height: 1.6;
+  }
+
+  .guide-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 12px;
+  }
+
+  .guide-box {
+    border: 2px solid var(--purple-light);
+    border-radius: 12px;
+    padding: 14px;
+  }
+
+  .guide-box.do-box {
+    border-color: var(--green-accent);
+    background: #F1F8E9;
+  }
+
+  .guide-box.dont-box {
+    border-color: var(--red-accent);
+    background: #FFF3F0;
+  }
+
+  .guide-box h3 {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  .guide-box.do-box h3 { color: var(--green-accent); }
+  .guide-box.dont-box h3 { color: var(--red-accent); }
+
+  .guide-box ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  .guide-box li {
+    font-size: 13px;
+    line-height: 1.5;
+    padding: 3px 0;
+    padding-left: 18px;
+    position: relative;
+  }
+
+  .guide-box.do-box li::before {
+    content: "\2713";
+    position: absolute;
+    left: 0;
+    color: var(--green-accent);
+    font-weight: 700;
+  }
+
+  .guide-box.dont-box li::before {
+    content: "\2717";
+    position: absolute;
+    left: 0;
+    color: var(--red-accent);
+    font-weight: 700;
+  }
+
+  /* ---------- WEEK TOTAL SECTION ---------- */
+  .week-total-section {
+    margin-top: 16px;
+    border: 3px solid var(--yellow-accent);
+    border-radius: 14px;
+    padding: 16px;
+    background: linear-gradient(135deg, #FFFDE7, #FFF8E1);
+    position: relative;
+  }
+
+  .week-total-section h3 {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--purple-dark);
+    text-align: center;
+    margin-bottom: 12px;
+  }
+
+  .week-score-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+
+  .week-score-row .day-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--purple-dark);
+    width: 60px;
+  }
+
+  .week-score-row .day-score-line {
+    flex: 1;
+    border-bottom: 2px dotted var(--gray-line);
+    height: 24px;
+  }
+
+  .week-score-row .day-score-box {
+    width: 50px;
+    height: 28px;
+    border: 2px solid var(--purple-light);
+    border-radius: 6px;
+    background: white;
+  }
+
+  .week-total-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 3px solid var(--yellow-accent);
+  }
+
+  .week-total-row .total-label {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--purple-dark);
+    flex: 1;
+  }
+
+  .week-total-row .total-box {
+    width: 70px;
+    height: 36px;
+    border: 3px solid var(--purple-mid);
+    border-radius: 8px;
+    background: white;
+  }
+
+  /* ---------- DRAWING AREA ---------- */
+  .drawing-area {
+    border: 3px dashed var(--purple-light);
+    border-radius: 14px;
+    min-height: 200px;
+    margin-top: 12px;
+    position: relative;
+    background: white;
+  }
+
+  .drawing-area .drawing-prompt {
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--purple-mid);
+    background: white;
+    padding: 2px 12px;
+    border-radius: 20px;
+    white-space: nowrap;
+  }
+</style>
+</head>
+<body>
+
+<!-- ============================================================ -->
+<!-- PAGE 1: COVER & STORY                                        -->
+<!-- ============================================================ -->
+<div class="page">
+
+  <div class="cover-header">
+    <div class="series-title">Monster Letters</div>
+    <h1>The Monster Party!</h1>
+    <div class="day-label">Day 5 &bull; Week 1 Finale</div>
+  </div>
+
+  <!-- All three monsters celebrating -->
+  <div style="text-align: center; margin-bottom: 12px;">
+    <svg viewBox="0 0 500 250" xmlns="http://www.w3.org/2000/svg" width="460" height="230">
+      <!-- Background: party banner -->
+      <path d="M 40 20 L 460 20" stroke="#FFD54F" stroke-width="3"/>
+      <!-- Triangle pennants -->
+      <polygon points="60,20 80,20 70,42" fill="#EF5350"/>
+      <polygon points="95,20 115,20 105,42" fill="#4CAF50"/>
+      <polygon points="130,20 150,20 140,42" fill="#9B6DD7"/>
+      <polygon points="165,20 185,20 175,42" fill="#FFD54F"/>
+      <polygon points="200,20 220,20 210,42" fill="#EF5350"/>
+      <polygon points="235,20 255,20 245,42" fill="#4CAF50"/>
+      <polygon points="270,20 290,20 280,42" fill="#9B6DD7"/>
+      <polygon points="305,20 325,20 315,42" fill="#FFD54F"/>
+      <polygon points="340,20 360,20 350,42" fill="#EF5350"/>
+      <polygon points="375,20 395,20 385,42" fill="#4CAF50"/>
+      <polygon points="410,20 430,20 420,42" fill="#9B6DD7"/>
+
+      <!-- Confetti bits -->
+      <rect x="70" y="50" width="6" height="6" rx="1" fill="#EF5350" transform="rotate(30,73,53)" opacity="0.7"/>
+      <rect x="150" y="55" width="5" height="5" rx="1" fill="#4CAF50" transform="rotate(-20,152,57)" opacity="0.7"/>
+      <rect x="330" y="48" width="6" height="6" rx="1" fill="#FFD54F" transform="rotate(45,333,51)" opacity="0.7"/>
+      <rect x="400" y="60" width="5" height="5" rx="1" fill="#9B6DD7" transform="rotate(15,402,62)" opacity="0.7"/>
+      <rect x="220" y="52" width="6" height="6" rx="1" fill="#FF9800" transform="rotate(-35,223,55)" opacity="0.7"/>
+      <circle cx="110" cy="58" r="3" fill="#FFD54F" opacity="0.6"/>
+      <circle cx="290" cy="50" r="3" fill="#EF5350" opacity="0.6"/>
+      <circle cx="440" cy="55" r="2.5" fill="#4CAF50" opacity="0.6"/>
+
+      <!-- ===== SCRIBBLE (center, purple, round, fuzzy) ===== -->
+      <!-- Party hat -->
+      <polygon points="250,52 235,95 265,95" fill="#EF5350"/>
+      <circle cx="250" cy="50" r="5" fill="#FFD54F"/>
+      <line x1="238" y1="82" x2="262" y2="82" stroke="#FFD54F" stroke-width="2"/>
+      <line x1="236" y1="89" x2="264" y2="89" stroke="#4CAF50" stroke-width="2"/>
+      <!-- Body -->
+      <ellipse cx="250" cy="155" rx="52" ry="48" fill="#9B6DD7"/>
+      <!-- Fur bumps -->
+      <circle cx="202" cy="138" r="10" fill="#8B5DC7"/>
+      <circle cx="200" cy="155" r="9" fill="#8B5DC7"/>
+      <circle cx="202" cy="172" r="10" fill="#8B5DC7"/>
+      <circle cx="212" cy="195" r="8" fill="#8B5DC7"/>
+      <circle cx="298" cy="138" r="10" fill="#8B5DC7"/>
+      <circle cx="300" cy="155" r="9" fill="#8B5DC7"/>
+      <circle cx="298" cy="172" r="10" fill="#8B5DC7"/>
+      <circle cx="288" cy="195" r="8" fill="#8B5DC7"/>
+      <circle cx="230" cy="200" r="8" fill="#8B5DC7"/>
+      <circle cx="250" cy="204" r="9" fill="#8B5DC7"/>
+      <circle cx="270" cy="200" r="8" fill="#8B5DC7"/>
+      <circle cx="220" cy="115" r="8" fill="#8B5DC7"/>
+      <circle cx="250" cy="110" r="9" fill="#8B5DC7"/>
+      <circle cx="280" cy="115" r="8" fill="#8B5DC7"/>
+      <!-- Inner body -->
+      <ellipse cx="250" cy="157" rx="40" ry="37" fill="#A980DE"/>
+      <!-- Eyes (happy/excited) -->
+      <ellipse cx="237" cy="145" rx="12" ry="14" fill="white"/>
+      <ellipse cx="263" cy="145" rx="12" ry="14" fill="white"/>
+      <circle cx="240" cy="146" r="7" fill="#2D1B4E"/>
+      <circle cx="266" cy="146" r="7" fill="#2D1B4E"/>
+      <circle cx="243" cy="142" r="2.5" fill="white"/>
+      <circle cx="269" cy="142" r="2.5" fill="white"/>
+      <!-- Big happy smile -->
+      <path d="M 232 172 Q 250 188 268 172" stroke="#2D1B4E" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      <!-- Arms up celebrating -->
+      <path d="M 202 148 Q 182 130 178 110" stroke="#8B5DC7" stroke-width="7" fill="none" stroke-linecap="round"/>
+      <circle cx="176" cy="108" r="5" fill="#8B5DC7"/>
+      <path d="M 298 148 Q 318 130 322 110" stroke="#8B5DC7" stroke-width="7" fill="none" stroke-linecap="round"/>
+      <circle cx="324" cy="108" r="5" fill="#8B5DC7"/>
+      <!-- Feet -->
+      <ellipse cx="234" cy="204" rx="13" ry="7" fill="#7B4DB7"/>
+      <ellipse cx="266" cy="204" rx="13" ry="7" fill="#7B4DB7"/>
+
+      <!-- ===== SPEEDSTER (left, green, small, angular with lightning ears) ===== -->
+      <!-- Party hat -->
+      <polygon points="105,85 93,118 117,118" fill="#FFD54F"/>
+      <circle cx="105" cy="83" r="4" fill="#EF5350"/>
+      <line x1="95" y1="107" x2="115" y2="107" stroke="#EF5350" stroke-width="1.5"/>
+      <!-- Body (angular/diamond-ish) -->
+      <path d="M 105 118 L 72 162 L 85 210 L 125 210 L 138 162 Z" fill="#4CAF50"/>
+      <!-- Inner body lighter -->
+      <path d="M 105 128 L 80 162 L 90 202 L 120 202 L 130 162 Z" fill="#5CBF60"/>
+      <!-- Lightning bolt ears -->
+      <path d="M 85 125 L 70 100 L 78 112 L 62 88" stroke="#FFD54F" stroke-width="3" fill="#FFD54F" stroke-linejoin="round"/>
+      <path d="M 125 125 L 140 100 L 132 112 L 148 88" stroke="#FFD54F" stroke-width="3" fill="#FFD54F" stroke-linejoin="round"/>
+      <!-- Eyes (big, energetic) -->
+      <ellipse cx="95" cy="148" rx="10" ry="11" fill="white"/>
+      <ellipse cx="115" cy="148" rx="10" ry="11" fill="white"/>
+      <circle cx="98" cy="148" r="6" fill="#2D1B4E"/>
+      <circle cx="118" cy="148" r="6" fill="#2D1B4E"/>
+      <circle cx="100" cy="145" r="2" fill="white"/>
+      <circle cx="120" cy="145" r="2" fill="white"/>
+      <!-- Huge excited grin -->
+      <path d="M 90 167 Q 105 180 120 167" stroke="#2D1B4E" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <!-- Speed lines -->
+      <line x1="55" y1="155" x2="40" y2="155" stroke="#4CAF50" stroke-width="2" opacity="0.4" stroke-linecap="round"/>
+      <line x1="55" y1="165" x2="35" y2="165" stroke="#4CAF50" stroke-width="2" opacity="0.3" stroke-linecap="round"/>
+      <line x1="55" y1="175" x2="42" y2="175" stroke="#4CAF50" stroke-width="2" opacity="0.4" stroke-linecap="round"/>
+      <!-- Legs (running/jumping) -->
+      <path d="M 90 208 Q 80 225 70 232" stroke="#3D8B40" stroke-width="5" fill="none" stroke-linecap="round"/>
+      <ellipse cx="68" cy="234" rx="10" ry="5" fill="#3D8B40"/>
+      <path d="M 120 208 Q 130 225 140 232" stroke="#3D8B40" stroke-width="5" fill="none" stroke-linecap="round"/>
+      <ellipse cx="142" cy="234" rx="10" ry="5" fill="#3D8B40"/>
+      <!-- Arms up -->
+      <path d="M 78 150 Q 60 135 55 120" stroke="#3D8B40" stroke-width="5" fill="none" stroke-linecap="round"/>
+      <circle cx="53" cy="118" r="4" fill="#3D8B40"/>
+      <path d="M 132 150 Q 148 135 152 122" stroke="#3D8B40" stroke-width="5" fill="none" stroke-linecap="round"/>
+      <circle cx="154" cy="120" r="4" fill="#3D8B40"/>
+
+      <!-- ===== BACKWARDS BOB (right, blue, tall, lanky) ===== -->
+      <!-- Party hat (on backwards, tilted) -->
+      <polygon points="385,48 370,85 400,85" fill="#4CAF50" transform="rotate(8,385,66)"/>
+      <circle cx="385" cy="46" r="4" fill="#EF5350" transform="rotate(8,385,66)"/>
+      <line x1="372" y1="74" x2="398" y2="74" stroke="#FFD54F" stroke-width="1.5" transform="rotate(8,385,66)"/>
+      <!-- Body (tall, narrow) -->
+      <rect x="365" y="90" width="45" height="100" rx="20" fill="#5B9BD5"/>
+      <!-- Inner body -->
+      <rect x="372" y="98" width="31" height="82" rx="14" fill="#6FB3E8"/>
+      <!-- Eyes (looking confused/happy) -->
+      <ellipse cx="379" cy="120" rx="9" ry="10" fill="white"/>
+      <ellipse cx="398" cy="120" rx="9" ry="10" fill="white"/>
+      <circle cx="381" cy="121" r="5.5" fill="#2D1B4E"/>
+      <circle cx="396" cy="121" r="5.5" fill="#2D1B4E"/>
+      <!-- One eye looking one way, one the other (confused) -->
+      <circle cx="379" cy="118" r="2" fill="white"/>
+      <circle cx="398" cy="118" r="2" fill="white"/>
+      <!-- Happy wobbly mouth -->
+      <path d="M 376 140 Q 388 152 400 140" stroke="#2D1B4E" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <!-- Long lanky arms waving -->
+      <path d="M 365 115 Q 340 100 330 80" stroke="#4A8AC2" stroke-width="5" fill="none" stroke-linecap="round"/>
+      <circle cx="328" cy="78" r="4" fill="#4A8AC2"/>
+      <path d="M 410 115 Q 435 100 445 80" stroke="#4A8AC2" stroke-width="5" fill="none" stroke-linecap="round"/>
+      <circle cx="447" cy="78" r="4" fill="#4A8AC2"/>
+      <!-- Long legs -->
+      <path d="M 378 190 L 370 232" stroke="#4A8AC2" stroke-width="5" fill="none" stroke-linecap="round"/>
+      <ellipse cx="368" cy="234" rx="10" ry="5" fill="#4A8AC2"/>
+      <path d="M 398" y1="190" d="M 398 190 L 406 232" stroke="#4A8AC2" stroke-width="5" fill="none" stroke-linecap="round"/>
+      <ellipse cx="408" cy="234" rx="10" ry="5" fill="#4A8AC2"/>
+
+      <!-- Party noisemaker in Speedster's hand -->
+      <line x1="53" y1="118" x2="30" y2="105" stroke="#EF5350" stroke-width="3" stroke-linecap="round"/>
+      <path d="M 30 105 L 18 100 Q 14 105 20 108 Z" fill="#EF5350"/>
+      <path d="M 18 100 Q 10 95 14 108" fill="#FF8A80" stroke="none"/>
+
+      <!-- Cake between Bob and Scribble -->
+      <rect x="310" y="205" width="45" height="25" rx="4" fill="#FFE0B2"/>
+      <rect x="308" y="200" width="49" height="10" rx="4" fill="#FFAB91"/>
+      <rect x="328" y="185" width="8" height="18" rx="2" fill="#FFD54F"/>
+      <circle cx="332" cy="182" r="4" fill="#EF5350" opacity="0.8"/>
+      <!-- Flame -->
+      <ellipse cx="332" cy="178" rx="2.5" ry="4" fill="#FF9800"/>
+      <ellipse cx="332" cy="177" rx="1.5" ry="2.5" fill="#FFD54F"/>
+    </svg>
+  </div>
+
+  <div class="story-box">
+    <div class="read-aloud">&#x1F4D6; Read aloud</div>
+    <p>It's Friday, so the monsters are having a <strong>PARTY!</strong> Scribble, Speedster, and Backwards Bob are all at Scribble's house. They need to make a sign for the party and write invitations.</p>
+    <p style="margin-top: 8px;">But every time one of them tries to write, it goes wrong! Scribble's writing is too messy, Speedster writes too fast to read, and Bob writes everything backwards. They need <strong>YOU</strong> to do ALL the writing!</p>
+  </div>
+
+  <div style="display: flex; gap: 12px; margin-top: 8px;">
+    <!-- Scribble's attempt -->
+    <div style="flex: 1; background: var(--purple-bg); border-radius: 10px; padding: 10px; text-align: center;">
+      <div style="font-size: 10px; font-weight: 600; color: var(--purple-mid); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px;">Scribble tried:</div>
+      <div style="font-family: 'Caveat', cursive; font-size: 22px; color: #9B6DD7; transform: rotate(-2deg);">MONSTR PRTY</div>
+      <div style="font-size: 11px; color: #888; margin-top: 2px;">Too messy!</div>
+    </div>
+    <!-- Speedster's attempt -->
+    <div style="flex: 1; background: #E8F5E9; border-radius: 10px; padding: 10px; text-align: center;">
+      <div style="font-size: 10px; font-weight: 600; color: var(--green-accent); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px;">Speedster tried:</div>
+      <div style="font-family: 'Caveat', cursive; font-size: 22px; color: var(--green-accent); transform: rotate(1deg);">MSTRPRTY!!!</div>
+      <div style="font-size: 11px; color: #888; margin-top: 2px;">Way too fast!</div>
+    </div>
+    <!-- Bob's attempt -->
+    <div style="flex: 1; background: #E3F2FD; border-radius: 10px; padding: 10px; text-align: center;">
+      <div style="font-size: 10px; font-weight: 600; color: #5B9BD5; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px;">Bob tried:</div>
+      <div style="font-family: 'Caveat', cursive; font-size: 22px; color: #5B9BD5; transform: rotate(2deg);">YTRAP RETSNOM</div>
+      <div style="font-size: 11px; color: #888; margin-top: 2px;">Backwards!</div>
+    </div>
+  </div>
+
+  <div class="parent-note">
+    <div class="note-label">&#x1F9E9; For parents</div>
+    <p>This is the Week 1 finale! It's meant to feel like a celebration. Let him laugh at all three failed attempts, then build excitement: "They need YOU — you're the only one who can save this party!" Keep energy high throughout.</p>
+  </div>
+
+  <span class="page-footer">Monster Letters &bull; Day 5</span>
+  <span class="page-number">1</span>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 2: SPEED DRILL 1 — PERSONAL RECORD ATTEMPT              -->
+<!-- ============================================================ -->
+<div class="page">
+
+  <div class="drill-header">
+    <span class="phase-badge">Phase 2 &bull; Drill 1</span>
+    <h2>Personal Record Attempt!</h2>
+    <span class="timer-badge">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="13" r="9"/><path d="M12 9v4l2.5 2.5"/><path d="M10 2h4"/></svg>
+      3 min
+    </span>
+  </div>
+
+  <div class="instructions">
+    <div class="icon">&#x1F3C6;</div>
+    <p>Remember those <strong>3 letters from Day 2?</strong> Do them again — same letters, same drill. Can you <strong>beat your records?</strong> The monsters are cheering you on!</p>
+  </div>
+
+  <div class="sprint-section">
+    <!-- Row 1 -->
+    <div class="sprint-row">
+      <div class="sprint-letter" style="border: 2px dashed var(--gray-line); border-radius: 8px; font-size: 16px; color: var(--gray-line);">same<br>letter</div>
+      <div class="sprint-line"><div class="midline"></div></div>
+      <div class="sprint-record" style="width: 170px;">
+        <div style="display: flex; gap: 6px;">
+          <div class="record-box" style="flex:1;">
+            <div style="font-size:9px; color: var(--purple-mid);">DAY 2</div>
+            <div class="record-val">&nbsp;</div>
+            <div style="font-size:9px;">sec</div>
+          </div>
+          <div class="record-box today-record" style="flex:1;">
+            <div style="font-size:9px; color: var(--green-accent);">TODAY</div>
+            <div class="record-val">&nbsp;</div>
+            <div style="font-size:9px;">sec</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Row 2 -->
+    <div class="sprint-row">
+      <div class="sprint-letter" style="border: 2px dashed var(--gray-line); border-radius: 8px; font-size: 16px; color: var(--gray-line);">same<br>letter</div>
+      <div class="sprint-line"><div class="midline"></div></div>
+      <div class="sprint-record" style="width: 170px;">
+        <div style="display: flex; gap: 6px;">
+          <div class="record-box" style="flex:1;">
+            <div style="font-size:9px; color: var(--purple-mid);">DAY 2</div>
+            <div class="record-val">&nbsp;</div>
+            <div style="font-size:9px;">sec</div>
+          </div>
+          <div class="record-box today-record" style="flex:1;">
+            <div style="font-size:9px; color: var(--green-accent);">TODAY</div>
+            <div class="record-val">&nbsp;</div>
+            <div style="font-size:9px;">sec</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Row 3 -->
+    <div class="sprint-row">
+      <div class="sprint-letter" style="border: 2px dashed var(--gray-line); border-radius: 8px; font-size: 16px; color: var(--gray-line);">same<br>letter</div>
+      <div class="sprint-line"><div class="midline"></div></div>
+      <div class="sprint-record" style="width: 170px;">
+        <div style="display: flex; gap: 6px;">
+          <div class="record-box" style="flex:1;">
+            <div style="font-size:9px; color: var(--purple-mid);">DAY 2</div>
+            <div class="record-val">&nbsp;</div>
+            <div style="font-size:9px;">sec</div>
+          </div>
+          <div class="record-box today-record" style="flex:1;">
+            <div style="font-size:9px; color: var(--green-accent);">TODAY</div>
+            <div class="record-val">&nbsp;</div>
+            <div style="font-size:9px;">sec</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Records comparison banner -->
+  <div style="text-align: center; margin: 16px 0 8px;">
+    <svg viewBox="0 0 400 60" width="350" height="55">
+      <rect x="60" y="5" width="280" height="50" rx="10" fill="var(--purple-bg)" stroke="var(--purple-light)" stroke-width="2"/>
+      <!-- Trophy icon -->
+      <path d="M 92 18 L 95 38 H 109 L 112 18 Z" fill="#FFD54F" stroke="#FFB74D" stroke-width="1.5"/>
+      <path d="M 92 18 H 112" stroke="#FFB74D" stroke-width="2" stroke-linecap="round"/>
+      <rect x="99" y="38" width="6" height="4" fill="#FFB74D"/>
+      <rect x="95" y="42" width="14" height="3" rx="1" fill="#FFB74D"/>
+      <path d="M 92 22 Q 82 22 82 28 Q 82 34 92 34" fill="none" stroke="#FFB74D" stroke-width="1.5"/>
+      <path d="M 112 22 Q 122 22 122 28 Q 122 34 112 34" fill="none" stroke="#FFB74D" stroke-width="1.5"/>
+      <text x="220" y="26" font-family="Fredoka, sans-serif" font-size="13" font-weight="600" fill="var(--purple-dark)" text-anchor="middle">Did you beat your records?</text>
+      <text x="220" y="44" font-family="Fredoka, sans-serif" font-size="11" font-weight="500" fill="var(--purple-mid)" text-anchor="middle">ANY improvement = amazing!</text>
+    </svg>
+  </div>
+
+  <div class="parent-note">
+    <div class="note-label">&#x1F9E9; How to run this</div>
+    <p><strong>Use the same 3 letters from Day 2.</strong> Write them in the left boxes. Copy the Day 2 times into the "DAY 2" circles. Then time each line again and write the new time in the green "TODAY" circles. Celebrate ANY improvement, even 1 second. If he didn't improve, say "Those are tough letters — you'll get them next week!"</p>
+  </div>
+
+  <!-- Speedster cheering -->
+  <div style="display: flex; justify-content: flex-end; margin-top: 8px;">
+    <svg viewBox="0 0 80 70" width="70" height="60">
+      <path d="M 40 15 L 20 42 L 28 68 L 52 68 L 60 42 Z" fill="#4CAF50"/>
+      <path d="M 40 22 L 25 42 L 31 62 L 49 62 L 55 42 Z" fill="#5CBF60"/>
+      <!-- Lightning ears -->
+      <path d="M 28 22 L 18 5 L 22 14 L 12 0" stroke="#FFD54F" stroke-width="2.5" fill="#FFD54F"/>
+      <path d="M 52 22 L 62 5 L 58 14 L 68 0" stroke="#FFD54F" stroke-width="2.5" fill="#FFD54F"/>
+      <!-- Eyes -->
+      <ellipse cx="34" cy="36" rx="7" ry="8" fill="white"/>
+      <ellipse cx="46" cy="36" rx="7" ry="8" fill="white"/>
+      <circle cx="36" cy="36" r="4" fill="#2D1B4E"/>
+      <circle cx="48" cy="36" r="4" fill="#2D1B4E"/>
+      <circle cx="37" cy="34" r="1.5" fill="white"/>
+      <circle cx="49" cy="34" r="1.5" fill="white"/>
+      <!-- Excited mouth -->
+      <path d="M 32 48 Q 40 56 48 48" stroke="#2D1B4E" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <!-- Speech: "GOGOGOGO!" -->
+      <rect x="55" y="10" width="25" height="14" rx="4" fill="white" stroke="#4CAF50" stroke-width="1"/>
+      <text x="67" y="21" font-family="Fredoka, sans-serif" font-size="6" font-weight="700" fill="#4CAF50" text-anchor="middle">GO GO!</text>
+    </svg>
+  </div>
+
+  <span class="page-footer">Monster Letters &bull; Day 5</span>
+  <span class="page-number">2</span>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 3: SPEED DRILL 2 — PARTY WORDS                          -->
+<!-- ============================================================ -->
+<div class="page">
+
+  <div class="drill-header">
+    <span class="phase-badge">Phase 2 &bull; Drill 2</span>
+    <h2>Party Words!</h2>
+    <span class="timer-badge">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="13" r="9"/><path d="M12 9v4l2.5 2.5"/><path d="M10 2h4"/></svg>
+      4 min
+    </span>
+  </div>
+
+  <div class="instructions">
+    <div class="icon">&#x1F389;</div>
+    <p>The monsters need party words! A grown-up says the word. <strong>You write it!</strong> These are all words you need for the best monster party EVER.</p>
+  </div>
+
+  <div class="word-grid">
+    <!-- FUN -->
+    <div class="word-card">
+      <div class="word-image">
+        <svg viewBox="0 0 60 60" width="50" height="50">
+          <!-- Smiley face = fun -->
+          <circle cx="30" cy="30" r="22" fill="#FFF9C4" stroke="#FFD54F" stroke-width="2"/>
+          <circle cx="22" cy="25" r="3" fill="#2D1B4E"/>
+          <circle cx="38" cy="25" r="3" fill="#2D1B4E"/>
+          <path d="M 20 36 Q 30 46 40 36" stroke="#2D1B4E" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="word-write">
+        <div class="word-number">#1</div>
+        <div class="word-write-line"><div class="midline"></div></div>
+      </div>
+    </div>
+
+    <!-- CAKE -->
+    <div class="word-card">
+      <div class="word-image">
+        <svg viewBox="0 0 60 60" width="50" height="50">
+          <!-- Cake -->
+          <rect x="12" y="30" width="36" height="20" rx="4" fill="#FFCCBC" stroke="#FF8A65" stroke-width="1.5"/>
+          <rect x="10" y="26" width="40" height="8" rx="3" fill="#FF8A65"/>
+          <!-- Candle -->
+          <rect x="27" y="14" width="6" height="14" rx="2" fill="#FFD54F"/>
+          <ellipse cx="30" cy="12" rx="3" ry="4" fill="#FF9800"/>
+          <ellipse cx="30" cy="11" rx="1.5" ry="2.5" fill="#FFD54F"/>
+          <!-- Frosting drips -->
+          <circle cx="18" cy="30" r="3" fill="#FF8A65"/>
+          <circle cx="30" cy="31" r="3" fill="#FF8A65"/>
+          <circle cx="42" cy="30" r="3" fill="#FF8A65"/>
+        </svg>
+      </div>
+      <div class="word-write">
+        <div class="word-number">#2</div>
+        <div class="word-write-line"><div class="midline"></div></div>
+      </div>
+    </div>
+
+    <!-- GAME -->
+    <div class="word-card">
+      <div class="word-image">
+        <svg viewBox="0 0 60 60" width="50" height="50">
+          <!-- Dice -->
+          <rect x="14" y="14" width="32" height="32" rx="5" fill="white" stroke="#9B6DD7" stroke-width="2"/>
+          <circle cx="24" cy="24" r="3" fill="#2D1B4E"/>
+          <circle cx="36" cy="24" r="3" fill="#2D1B4E"/>
+          <circle cx="30" cy="30" r="3" fill="#2D1B4E"/>
+          <circle cx="24" cy="36" r="3" fill="#2D1B4E"/>
+          <circle cx="36" cy="36" r="3" fill="#2D1B4E"/>
+        </svg>
+      </div>
+      <div class="word-write">
+        <div class="word-number">#3</div>
+        <div class="word-write-line"><div class="midline"></div></div>
+      </div>
+    </div>
+
+    <!-- SING -->
+    <div class="word-card">
+      <div class="word-image">
+        <svg viewBox="0 0 60 60" width="50" height="50">
+          <!-- Music notes -->
+          <circle cx="20" cy="38" r="6" fill="#9B6DD7"/>
+          <line x1="26" y1="38" x2="26" y2="14" stroke="#9B6DD7" stroke-width="2.5"/>
+          <circle cx="38" cy="34" r="6" fill="#9B6DD7"/>
+          <line x1="44" y1="34" x2="44" y2="10" stroke="#9B6DD7" stroke-width="2.5"/>
+          <line x1="26" y1="14" x2="44" y2="10" stroke="#9B6DD7" stroke-width="3" stroke-linecap="round"/>
+          <!-- Small notes flying -->
+          <text x="14" y="18" font-size="10" fill="#E8D5F5">&#9835;</text>
+          <text x="42" y="24" font-size="8" fill="#E8D5F5">&#9834;</text>
+        </svg>
+      </div>
+      <div class="word-write">
+        <div class="word-number">#4</div>
+        <div class="word-write-line"><div class="midline"></div></div>
+      </div>
+    </div>
+
+    <!-- JUMP -->
+    <div class="word-card">
+      <div class="word-image">
+        <svg viewBox="0 0 60 60" width="50" height="50">
+          <!-- Stick figure jumping -->
+          <circle cx="30" cy="14" r="6" fill="none" stroke="#4CAF50" stroke-width="2"/>
+          <line x1="30" y1="20" x2="30" y2="36" stroke="#4CAF50" stroke-width="2.5"/>
+          <!-- Arms up -->
+          <line x1="30" y1="26" x2="20" y2="16" stroke="#4CAF50" stroke-width="2.5" stroke-linecap="round"/>
+          <line x1="30" y1="26" x2="40" y2="16" stroke="#4CAF50" stroke-width="2.5" stroke-linecap="round"/>
+          <!-- Legs apart -->
+          <line x1="30" y1="36" x2="22" y2="48" stroke="#4CAF50" stroke-width="2.5" stroke-linecap="round"/>
+          <line x1="30" y1="36" x2="38" y2="48" stroke="#4CAF50" stroke-width="2.5" stroke-linecap="round"/>
+          <!-- Ground line with space (jumping!) -->
+          <line x1="12" y1="52" x2="24" y2="52" stroke="#4CAF50" stroke-width="1.5" stroke-dasharray="3,3"/>
+          <line x1="36" y1="52" x2="48" y2="52" stroke="#4CAF50" stroke-width="1.5" stroke-dasharray="3,3"/>
+        </svg>
+      </div>
+      <div class="word-write">
+        <div class="word-number">#5</div>
+        <div class="word-write-line"><div class="midline"></div></div>
+      </div>
+    </div>
+
+    <!-- GIFT -->
+    <div class="word-card">
+      <div class="word-image">
+        <svg viewBox="0 0 60 60" width="50" height="50">
+          <!-- Gift box -->
+          <rect x="14" y="26" width="32" height="24" rx="3" fill="#E8D5F5" stroke="#9B6DD7" stroke-width="2"/>
+          <!-- Lid -->
+          <rect x="11" y="20" width="38" height="10" rx="3" fill="#9B6DD7"/>
+          <!-- Ribbon vertical -->
+          <rect x="27" y="20" width="6" height="30" fill="#EF5350"/>
+          <!-- Ribbon horizontal -->
+          <rect x="11" y="22" width="38" height="6" fill="#EF5350" rx="1"/>
+          <!-- Bow -->
+          <ellipse cx="26" cy="18" rx="6" ry="4" fill="#EF5350" transform="rotate(-20,26,18)"/>
+          <ellipse cx="34" cy="18" rx="6" ry="4" fill="#EF5350" transform="rotate(20,34,18)"/>
+          <circle cx="30" cy="19" r="3" fill="#FF8A80"/>
+        </svg>
+      </div>
+      <div class="word-write">
+        <div class="word-number">#6</div>
+        <div class="word-write-line"><div class="midline"></div></div>
+      </div>
+    </div>
+
+    <!-- PLAY -->
+    <div class="word-card">
+      <div class="word-image">
+        <svg viewBox="0 0 60 60" width="50" height="50">
+          <!-- Ball -->
+          <circle cx="30" cy="30" r="18" fill="#FF9800" stroke="#E65100" stroke-width="1.5"/>
+          <!-- Ball stripes -->
+          <path d="M 30 12 Q 22 30 30 48" stroke="white" stroke-width="1.5" fill="none"/>
+          <path d="M 30 12 Q 38 30 30 48" stroke="white" stroke-width="1.5" fill="none"/>
+          <line x1="12" y1="30" x2="48" y2="30" stroke="white" stroke-width="1.5"/>
+          <!-- Bounce lines -->
+          <path d="M 20 50 Q 30 46 40 50" stroke="#E65100" stroke-width="1" fill="none" opacity="0.4"/>
+          <path d="M 24 54" stroke="#E65100" stroke-width="1" fill="none" opacity="0.3"/>
+        </svg>
+      </div>
+      <div class="word-write">
+        <div class="word-number">#7</div>
+        <div class="word-write-line"><div class="midline"></div></div>
+      </div>
+    </div>
+
+    <!-- GRIN -->
+    <div class="word-card">
+      <div class="word-image">
+        <svg viewBox="0 0 60 60" width="50" height="50">
+          <!-- Big grin face -->
+          <circle cx="30" cy="30" r="22" fill="#E8F5E9" stroke="#4CAF50" stroke-width="2"/>
+          <!-- Happy squinting eyes -->
+          <path d="M 18 24 Q 22 20 26 24" stroke="#2D1B4E" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+          <path d="M 34 24 Q 38 20 42 24" stroke="#2D1B4E" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+          <!-- Big toothy grin -->
+          <path d="M 18 34 Q 30 48 42 34" stroke="#2D1B4E" stroke-width="2.5" fill="white" stroke-linecap="round"/>
+          <line x1="24" y1="37" x2="24" y2="40" stroke="#2D1B4E" stroke-width="1"/>
+          <line x1="30" y1="37" x2="30" y2="42" stroke="#2D1B4E" stroke-width="1"/>
+          <line x1="36" y1="37" x2="36" y2="40" stroke="#2D1B4E" stroke-width="1"/>
+        </svg>
+      </div>
+      <div class="word-write">
+        <div class="word-number">#8</div>
+        <div class="word-write-line"><div class="midline"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCORING -->
+  <div class="score-section">
+    <div class="score-box">
+      <div class="score-label">Words Tried</div>
+      <div class="score-value">&nbsp;</div>
+      <div class="score-max">out of 8</div>
+    </div>
+    <div class="score-box bonus">
+      <div class="score-label">Bonus (readable)</div>
+      <div class="score-value">&nbsp;</div>
+      <div class="score-max">out of 8</div>
+    </div>
+    <div class="score-box total">
+      <div class="score-label">Day 5 Total</div>
+      <div class="score-value">&nbsp;</div>
+      <div class="score-max">out of 16</div>
+    </div>
+  </div>
+
+  <div class="parent-note" style="margin-top: 14px;">
+    <div class="note-label">&#x1F4CA; Compare to Day 1</div>
+    <p>If you have Day 1's score, compare it now! "On Day 1 you got ___. Today you got ___!" Even 1 point of improvement is worth celebrating. The point is to show that practice = progress.</p>
+  </div>
+
+  <span class="page-footer">Monster Letters &bull; Day 5</span>
+  <span class="page-number">3</span>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 4: CHALLENGE — PARTY SIGN OR INVITATION                  -->
+<!-- ============================================================ -->
+<div class="page">
+
+  <div class="drill-header">
+    <span class="phase-badge">Phase 3</span>
+    <h2>Save the Party!</h2>
+    <span class="timer-badge">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="13" r="9"/><path d="M12 9v4l2.5 2.5"/><path d="M10 2h4"/></svg>
+      5 min
+    </span>
+  </div>
+
+  <div class="instructions">
+    <div class="icon">&#x1F3C5;</div>
+    <p>The monsters need YOUR help! <strong>Pick one</strong> (or do both if you're fast!):</p>
+  </div>
+
+  <!-- Option A: Party Sign -->
+  <div class="choice-section">
+    <div class="choice-badge">Option A</div>
+    <h3>Make the Party Sign!</h3>
+    <p style="font-size: 13px; margin-bottom: 6px;">Write <strong>MONSTER PARTY</strong> in big, clear letters so everyone in Monster Town can read it.</p>
+    <div class="big-write-area" style="min-height: 110px; display: flex; align-items: center; justify-content: center;">
+      <div style="width: 90%; text-align: center;">
+        <div style="border-bottom: 3px solid var(--gray-line); height: 50px; position: relative; margin-bottom: 4px;">
+          <div style="position: absolute; bottom: 20px; left: 0; right: 0; border-bottom: 1px dashed #E0D0F0;"></div>
+        </div>
+        <div style="font-size: 10px; color: var(--gray-line); font-weight: 500;">Write BIG and CLEAR!</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Option B: Invitation -->
+  <div class="choice-section" style="margin-top: 20px;">
+    <div class="choice-badge">Option B</div>
+    <h3>Write a Party Invitation!</h3>
+    <p style="font-size: 13px; margin-bottom: 6px;">Write <strong>2 sentences</strong> to invite monsters to the party. Use the example or write your own!</p>
+    <div style="background: var(--purple-bg); border-radius: 8px; padding: 8px 14px; margin-bottom: 10px;">
+      <p style="font-size: 13px; color: var(--purple-mid); font-style: italic;">"Come to the party! It will be fun." — or write your own!</p>
+    </div>
+    <div class="writing-line"><div class="midline"></div></div>
+    <div class="writing-line"><div class="midline"></div></div>
+    <div class="writing-line"><div class="midline"></div></div>
+    <div class="writing-line"><div class="midline"></div></div>
+  </div>
+
+  <!-- Drawing area -->
+  <div class="drawing-area" style="min-height: 155px;">
+    <div class="drawing-prompt">Draw all the monsters at the party!</div>
+  </div>
+
+  <span class="page-footer">Monster Letters &bull; Day 5</span>
+  <span class="page-number">4</span>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 5: PARENT GUIDE + WEEK 1 TOTAL                          -->
+<!-- ============================================================ -->
+<div class="page">
+
+  <div class="drill-header">
+    <span class="phase-badge">For Parents</span>
+    <h2>Day 5 Guide &bull; Week 1 Finale!</h2>
+  </div>
+
+  <div class="timing-strip">
+    <div class="timing-block">
+      <div class="t-phase">Phase 1</div>
+      <div class="t-time">2 min</div>
+      <div class="t-desc">Story + failed attempts</div>
+    </div>
+    <div class="timing-block">
+      <div class="t-phase">Phase 2</div>
+      <div class="t-time">7 min</div>
+      <div class="t-desc">Record attempt + party words</div>
+    </div>
+    <div class="timing-block">
+      <div class="t-phase">Phase 3</div>
+      <div class="t-time">5 min</div>
+      <div class="t-desc">Sign or invitation + drawing</div>
+    </div>
+  </div>
+
+  <div class="script-box">
+    <div class="script-label">What's special today</div>
+    <p><strong>This is the Week 1 celebration!</strong> The energy should feel like a finale. All three monsters are together for the first time, the child is the hero who saves the party by being the only one who can write. Lean into it — voices, excitement, drama. "Without you, there's no sign! No invitations! The party is DOOMED!"</p>
+  </div>
+
+  <div class="script-box">
+    <div class="script-label">Phase 2 — Personal record attempt</div>
+    <p><strong>Use the exact same 3 letters from Day 2.</strong> Copy the Day 2 times into the "DAY 2" circles first. Then re-time each line. If he improved: "NEW RECORD! The monsters are going WILD!" If not: "Still a great time. Those are tough letters — you'll crush them next week."</p>
+  </div>
+
+  <div class="script-box">
+    <div class="script-label">Phase 3 — The choice</div>
+    <p>Let him pick Option A (party sign) or Option B (invitation). Both are great. If he finishes one quickly and wants to do the other, let him! The drawing area is the reward — "Now draw what the party looks like with all three monsters." This should feel fun, not like work.</p>
+  </div>
+
+  <div class="guide-grid">
+    <div class="guide-box do-box">
+      <h3>Day 5 Wins</h3>
+      <ul>
+        <li>He re-did the letter sprint (any result is fine)</li>
+        <li>He attempted the party words</li>
+        <li>He completed at least one challenge option</li>
+        <li>He had fun — this is the big one!</li>
+        <li>You have a Week 1 total to write on the card</li>
+      </ul>
+    </div>
+    <div class="guide-box dont-box">
+      <h3>Watch for</h3>
+      <ul>
+        <li>Disappointment if records didn't improve — reframe as "same time = consistent!"</li>
+        <li>Wanting to do both options perfectly — pick one, move on</li>
+        <li>Rushing the drawing — let him enjoy it if there's time</li>
+        <li>Going over 15 min — end on a high note, even mid-drawing</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- WEEK 1 TOTAL SECTION -->
+  <div class="week-total-section">
+    <div style="text-align: center; margin-bottom: 6px;">
+      <svg viewBox="0 0 200 40" width="180" height="36">
+        <!-- Star cluster -->
+        <polygon points="30,4 33,14 44,14 35,20 38,30 30,24 22,30 25,20 16,14 27,14" fill="#FFD54F" stroke="#FFB74D" stroke-width="1"/>
+        <polygon points="100,2 104,14 116,14 106,22 110,34 100,26 90,34 94,22 84,14 96,14" fill="#FFD54F" stroke="#FFB74D" stroke-width="1"/>
+        <polygon points="170,4 173,14 184,14 175,20 178,30 170,24 162,30 165,20 156,14 167,14" fill="#FFD54F" stroke="#FFB74D" stroke-width="1"/>
+      </svg>
+    </div>
+    <h3>Week 1 Score Total</h3>
+    <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+      <div class="week-score-row" style="flex: 1; min-width: 45%;">
+        <div class="day-name">Day 1</div>
+        <div class="day-score-line"></div>
+        <div class="day-score-box"></div>
+      </div>
+      <div class="week-score-row" style="flex: 1; min-width: 45%;">
+        <div class="day-name">Day 2</div>
+        <div class="day-score-line"></div>
+        <div class="day-score-box"></div>
+      </div>
+      <div class="week-score-row" style="flex: 1; min-width: 45%;">
+        <div class="day-name">Day 3</div>
+        <div class="day-score-line"></div>
+        <div class="day-score-box"></div>
+      </div>
+      <div class="week-score-row" style="flex: 1; min-width: 45%;">
+        <div class="day-name">Day 4</div>
+        <div class="day-score-line"></div>
+        <div class="day-score-box"></div>
+      </div>
+      <div class="week-score-row" style="flex: 1; min-width: 45%;">
+        <div class="day-name">Day 5</div>
+        <div class="day-score-line"></div>
+        <div class="day-score-box"></div>
+      </div>
+    </div>
+    <div class="week-total-row">
+      <div class="total-label">WEEK 1 GRAND TOTAL</div>
+      <div class="total-box"></div>
+    </div>
+    <p style="font-size: 11px; color: #5D4037; text-align: center; margin-top: 8px;">Write this total on a card and save it &mdash; it's the number to beat in Week 2!</p>
+  </div>
+
+  <div class="parent-note" style="margin-top: 12px;">
+    <div class="note-label">&#x1F4AC; Looking ahead</div>
+    <p><strong>Week 2: "Monster Town Problems"</strong> starts next session! The monsters explore Monster Town, where signs are missing, mail is mixed up, and grocery lists are wrong. New adventures, longer words, and building on everything he learned this week. Great job getting through Week 1!</p>
+  </div>
+
+  <span class="page-footer">Monster Letters &bull; Day 5</span>
+  <span class="page-number">5</span>
+</div>
+
+</body>
+</html>

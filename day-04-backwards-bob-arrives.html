@@ -1,0 +1,1216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Monster Letters — Day 4: Backwards Bob Arrives</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Patrick+Hand&family=Caveat:wght@700&display=swap');
+
+  :root {
+    --purple-dark: #6B3FA0;
+    --purple-mid: #9B6DD7;
+    --purple-light: #E8D5F5;
+    --purple-bg: #F5EEFA;
+    --green-accent: #4CAF50;
+    --orange-accent: #FF9800;
+    --yellow-accent: #FFD54F;
+    --red-accent: #EF5350;
+    --gray-line: #CCBBDD;
+    --gray-light: #F0F0F0;
+    --text-dark: #2D1B4E;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Fredoka', sans-serif;
+    color: var(--text-dark);
+    background: #FAFAFA;
+  }
+
+  @media print {
+    body { background: white; }
+    .page {
+      page-break-after: always;
+      box-shadow: none !important;
+      margin: 0 !important;
+      border-radius: 0 !important;
+    }
+    .page:last-child { page-break-after: avoid; }
+    .no-print { display: none !important; }
+    @page { margin: 0.5in; size: letter; }
+  }
+
+  @media screen {
+    body { padding: 20px; background: #E8D5F5; }
+    .page {
+      max-width: 8.5in;
+      margin: 30px auto;
+      box-shadow: 0 4px 20px rgba(107, 63, 160, 0.2);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+  }
+
+  .page {
+    width: 8.5in;
+    min-height: 10in;
+    background: white;
+    padding: 0.5in;
+    position: relative;
+  }
+
+  /* ---------- SHARED COMPONENTS ---------- */
+  .cover-header {
+    text-align: center;
+    margin-bottom: 15px;
+  }
+
+  .cover-header .series-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--purple-mid);
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-bottom: 2px;
+  }
+
+  .cover-header h1 {
+    font-size: 38px;
+    font-weight: 700;
+    color: var(--purple-dark);
+    line-height: 1.1;
+    margin-bottom: 2px;
+  }
+
+  .cover-header .day-label {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--purple-mid);
+  }
+
+  .drill-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 3px solid var(--purple-light);
+  }
+
+  .drill-header .phase-badge {
+    background: var(--purple-dark);
+    color: white;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 20px;
+    white-space: nowrap;
+  }
+
+  .drill-header h2 {
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--purple-dark);
+    flex: 1;
+  }
+
+  .drill-header .timer-badge {
+    background: var(--red-accent);
+    color: white;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .timer-icon {
+    display: inline-block;
+  }
+
+  .timer-icon svg {
+    vertical-align: middle;
+  }
+
+  .instructions {
+    background: var(--purple-bg);
+    border-radius: 10px;
+    padding: 12px 16px;
+    margin-bottom: 16px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+
+  .instructions .icon {
+    font-size: 24px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .instructions p {
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  .instructions strong {
+    color: var(--purple-dark);
+  }
+
+  .story-box {
+    background: var(--purple-bg);
+    border-radius: 12px;
+    padding: 16px 18px;
+    border-left: 4px solid var(--purple-mid);
+    margin-bottom: 12px;
+  }
+
+  .story-box .read-aloud {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--purple-mid);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+  }
+
+  .story-box p {
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--text-dark);
+  }
+
+  .parent-note {
+    background: #FFF3E0;
+    border-radius: 8px;
+    padding: 10px 14px;
+    margin-top: 12px;
+    border: 1px solid #FFE0B2;
+  }
+
+  .parent-note .note-label {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--orange-accent);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .parent-note p {
+    font-size: 12px;
+    line-height: 1.5;
+    color: #5D4037;
+    margin-top: 3px;
+  }
+
+  .writing-prompt {
+    background: var(--purple-bg);
+    border-radius: 12px;
+    padding: 14px 20px;
+    margin: 12px 0 16px;
+    text-align: center;
+    border: 2px solid var(--purple-light);
+  }
+
+  .writing-prompt p {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--purple-dark);
+  }
+
+  .writing-prompt .sub {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--purple-mid);
+    margin-top: 4px;
+  }
+
+  .writing-line {
+    height: 40px;
+    border-bottom: 2px solid var(--gray-line);
+    position: relative;
+    margin-bottom: 2px;
+  }
+
+  .writing-line .midline {
+    position: absolute;
+    bottom: 16px;
+    left: 0;
+    right: 0;
+    border-bottom: 1px dashed #E0D0F0;
+  }
+
+  .score-section {
+    display: flex;
+    gap: 16px;
+    align-items: stretch;
+  }
+
+  .score-box {
+    flex: 1;
+    border: 2px solid var(--purple-light);
+    border-radius: 12px;
+    padding: 14px;
+    text-align: center;
+  }
+
+  .score-box .score-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--purple-mid);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+  }
+
+  .score-box .score-value {
+    font-size: 42px;
+    font-weight: 700;
+    color: var(--purple-dark);
+    line-height: 1;
+  }
+
+  .score-box .score-max {
+    font-size: 14px;
+    color: var(--purple-mid);
+    font-weight: 500;
+  }
+
+  .score-box.bonus {
+    background: #FFF8E1;
+    border-color: var(--yellow-accent);
+  }
+
+  .score-box.total {
+    background: var(--purple-bg);
+    border-color: var(--purple-mid);
+  }
+
+  .page-number {
+    position: absolute;
+    bottom: 20px;
+    right: 30px;
+    font-size: 12px;
+    color: var(--gray-line);
+    font-weight: 600;
+  }
+
+  .page-footer {
+    position: absolute;
+    bottom: 20px;
+    left: 30px;
+    font-size: 10px;
+    color: var(--gray-line);
+    font-weight: 500;
+  }
+
+  /* ---------- PAGE 1: BOB'S MIRROR NOTE ---------- */
+  .mirror-note {
+    background: #FFFDE7;
+    border: 2px solid #FFE082;
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin: 14px 0;
+    text-align: center;
+    position: relative;
+    transform: rotate(-1deg);
+  }
+
+  .mirror-note .note-from {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--orange-accent);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+  }
+
+  .mirror-note .mirror-text {
+    font-family: 'Caveat', cursive;
+    font-size: 32px;
+    font-weight: 700;
+    color: #3D5AFE;
+    direction: rtl;
+    unicode-bidi: bidi-override;
+    letter-spacing: 2px;
+    line-height: 1.4;
+  }
+
+  .decode-section {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    margin-top: 14px;
+  }
+
+  .decode-section .decode-prompt {
+    background: #E3F2FD;
+    border: 2px solid #90CAF9;
+    border-radius: 10px;
+    padding: 12px 16px;
+    flex: 1;
+  }
+
+  .decode-section .decode-prompt .decode-label {
+    font-size: 10px;
+    font-weight: 600;
+    color: #1976D2;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+  }
+
+  .decode-line {
+    border-bottom: 2px solid #90CAF9;
+    height: 36px;
+    position: relative;
+    margin-bottom: 4px;
+  }
+
+  .decode-line .midline {
+    position: absolute;
+    bottom: 14px;
+    left: 0;
+    right: 0;
+    border-bottom: 1px dashed #BBDEFB;
+  }
+
+  /* ---------- PAGE 2: LETTER WARM-UP ---------- */
+  .sprint-section {
+    margin-bottom: 20px;
+  }
+
+  .sprint-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+    padding: 8px 12px;
+    border: 2px solid var(--purple-light);
+    border-radius: 10px;
+  }
+
+  .sprint-row:nth-child(even) {
+    background: var(--purple-bg);
+  }
+
+  .sprint-letter {
+    font-size: 40px;
+    font-weight: 700;
+    color: var(--purple-dark);
+    width: 50px;
+    text-align: center;
+    flex-shrink: 0;
+  }
+
+  .sprint-line {
+    flex: 1;
+    height: 50px;
+    border-bottom: 2px solid var(--gray-line);
+    position: relative;
+  }
+
+  .sprint-line .midline {
+    position: absolute;
+    bottom: 20px;
+    left: 0;
+    right: 0;
+    border-bottom: 1px dashed #E0D0F0;
+  }
+
+  .sprint-pair-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--purple-mid);
+    text-align: center;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  /* ---------- PAGE 3: BOB'S BACKWARDS WORDS ---------- */
+  .word-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 20px;
+  }
+
+  .word-card {
+    border: 2px solid var(--purple-light);
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    min-height: 80px;
+  }
+
+  .word-card .word-image {
+    width: 80px;
+    background: var(--purple-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-right: 2px solid var(--purple-light);
+    flex-shrink: 0;
+  }
+
+  .word-card .word-write {
+    flex: 1;
+    padding: 8px 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .word-card .word-number {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--purple-mid);
+    margin-bottom: 4px;
+  }
+
+  .word-write-line {
+    border-bottom: 2px solid var(--gray-line);
+    height: 36px;
+    position: relative;
+  }
+
+  .word-write-line .midline {
+    position: absolute;
+    bottom: 14px;
+    left: 0;
+    right: 0;
+    border-bottom: 1px dashed #E0D0F0;
+  }
+
+  /* ---------- PAGE 4: CHALLENGE ---------- */
+  .challenge-prompt-box {
+    background: #E3F2FD;
+    border: 2px solid #90CAF9;
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin: 14px 0;
+  }
+
+  .challenge-prompt-box .prompt-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: #1976D2;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+  }
+
+  .challenge-prompt-box p {
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--text-dark);
+  }
+
+  .drawing-area {
+    border: 3px dashed var(--purple-light);
+    border-radius: 14px;
+    min-height: 180px;
+    margin-top: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #FAFAFA;
+  }
+
+  .drawing-area .draw-prompt {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--gray-line);
+    text-align: center;
+    padding: 12px;
+  }
+
+  /* ---------- PAGE 5: PARENT GUIDE ---------- */
+  .timing-strip {
+    display: flex;
+    gap: 0;
+    margin: 14px 0;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 2px solid var(--purple-light);
+  }
+
+  .timing-block {
+    flex: 1;
+    padding: 12px;
+    text-align: center;
+  }
+
+  .timing-block:not(:last-child) {
+    border-right: 2px solid var(--purple-light);
+  }
+
+  .timing-block .t-phase {
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 3px;
+  }
+
+  .timing-block .t-time {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--purple-dark);
+  }
+
+  .timing-block .t-desc {
+    font-size: 11px;
+    color: #888;
+    margin-top: 2px;
+  }
+
+  .timing-block:nth-child(1) { background: #F3E5F5; }
+  .timing-block:nth-child(1) .t-phase { color: #9C27B0; }
+  .timing-block:nth-child(2) { background: #FFF3E0; }
+  .timing-block:nth-child(2) .t-phase { color: #FF9800; }
+  .timing-block:nth-child(3) { background: #E8F5E9; }
+  .timing-block:nth-child(3) .t-phase { color: #4CAF50; }
+
+  .script-box {
+    background: #F5F5F5;
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin: 10px 0;
+    border-left: 4px solid var(--purple-mid);
+  }
+
+  .script-box .script-label {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--purple-mid);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+  }
+
+  .script-box p {
+    font-size: 13px;
+    line-height: 1.6;
+  }
+
+  .guide-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 12px;
+  }
+
+  .guide-box {
+    border: 2px solid var(--purple-light);
+    border-radius: 12px;
+    padding: 14px;
+  }
+
+  .guide-box.do-box {
+    border-color: var(--green-accent);
+    background: #F1F8E9;
+  }
+
+  .guide-box.dont-box {
+    border-color: var(--red-accent);
+    background: #FFF3F0;
+  }
+
+  .guide-box h3 {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  .guide-box.do-box h3 { color: var(--green-accent); }
+  .guide-box.dont-box h3 { color: var(--red-accent); }
+
+  .guide-box ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  .guide-box li {
+    font-size: 13px;
+    line-height: 1.5;
+    padding: 3px 0;
+    padding-left: 18px;
+    position: relative;
+  }
+
+  .guide-box.do-box li::before {
+    content: "\2713";
+    position: absolute;
+    left: 0;
+    color: var(--green-accent);
+    font-weight: 700;
+  }
+
+  .guide-box.dont-box li::before {
+    content: "\2717";
+    position: absolute;
+    left: 0;
+    color: var(--red-accent);
+    font-weight: 700;
+  }
+</style>
+</head>
+<body>
+
+<!-- ============================================================ -->
+<!-- PAGE 1: COVER & STORY                                        -->
+<!-- ============================================================ -->
+<div class="page">
+
+  <div class="cover-header">
+    <div class="series-title">Monster Letters</div>
+    <h1>Backwards Bob Arrives</h1>
+    <div class="day-label">Day 4 &bull; Week 1</div>
+  </div>
+
+  <div style="display: flex; gap: 20px; align-items: flex-start; margin-bottom: 10px;">
+    <div style="flex: 1;">
+      <div class="story-box">
+        <div class="read-aloud">&#x1F4D6; Read aloud</div>
+        <p>A new monster came to Scribble's house &mdash; <strong>Backwards Bob!</strong> Bob is really nice, but he does <em>everything</em> backwards. He walked in through the <strong>back door</strong>, said <strong>"BYE"</strong> instead of <strong>"HI,"</strong> and then wrote Scribble a note &mdash; but it was all backwards!</p>
+        <p style="margin-top:8px;">Can you help decode Bob's note?</p>
+      </div>
+    </div>
+
+    <!-- Backwards Bob SVG: tall, blue, lanky, confused -->
+    <div style="flex: 0 0 140px;">
+      <svg viewBox="0 0 140 260" xmlns="http://www.w3.org/2000/svg" width="140" height="260">
+        <!-- Bob is facing/leaning slightly backwards -->
+        <g transform="translate(70,130)">
+          <!-- Legs (long, lanky) -->
+          <rect x="-22" y="70" width="14" height="50" rx="7" fill="#2979FF" transform="rotate(5)"/>
+          <rect x="8" y="70" width="14" height="50" rx="7" fill="#2979FF" transform="rotate(-3)"/>
+          <!-- Feet (pointing backwards!) -->
+          <ellipse cx="-18" cy="122" rx="16" ry="7" fill="#1565C0" transform="rotate(175, -18, 122)"/>
+          <ellipse cx="18" cy="120" rx="16" ry="7" fill="#1565C0" transform="rotate(175, 18, 120)"/>
+
+          <!-- Body (tall, narrow) -->
+          <rect x="-28" y="-60" width="56" height="135" rx="24" fill="#42A5F5"/>
+          <!-- Belly -->
+          <ellipse cx="0" cy="10" rx="20" ry="30" fill="#64B5F6"/>
+
+          <!-- Arms (one waving backwards) -->
+          <path d="M -28 -10 Q -55 -25 -50 -50" stroke="#2979FF" stroke-width="10" fill="none" stroke-linecap="round"/>
+          <circle cx="-50" cy="-53" r="7" fill="#2979FF"/>
+          <path d="M 28 0 Q 50 15 55 35" stroke="#2979FF" stroke-width="10" fill="none" stroke-linecap="round"/>
+          <circle cx="56" cy="38" r="7" fill="#2979FF"/>
+
+          <!-- Head (slightly tilted) -->
+          <ellipse cx="0" cy="-82" rx="30" ry="28" fill="#42A5F5" transform="rotate(5)"/>
+
+          <!-- Eyes (looking in different directions!) -->
+          <ellipse cx="-12" cy="-88" rx="10" ry="11" fill="white"/>
+          <ellipse cx="14" cy="-88" rx="10" ry="11" fill="white"/>
+          <!-- Left eye looking left -->
+          <circle cx="-16" cy="-87" r="5.5" fill="#1A237E"/>
+          <circle cx="-18" cy="-90" r="2" fill="white"/>
+          <!-- Right eye looking right -->
+          <circle cx="19" cy="-87" r="5.5" fill="#1A237E"/>
+          <circle cx="21" cy="-90" r="2" fill="white"/>
+
+          <!-- Eyebrows (one raised = confused) -->
+          <path d="M -22 -102 Q -12 -110 -4 -102" stroke="#1565C0" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+          <path d="M 6 -99 Q 14 -106 24 -100" stroke="#1565C0" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+
+          <!-- Confused wobbly smile -->
+          <path d="M -12 -70 Q -5 -64 0 -68 Q 5 -72 12 -66" stroke="#1A237E" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+
+          <!-- Small horns/antennae -->
+          <path d="M -14 -108 L -18 -124 L -10 -114" fill="#2979FF"/>
+          <path d="M 14 -108 L 18 -124 L 10 -114" fill="#2979FF"/>
+          <circle cx="-18" cy="-125" r="4" fill="#64B5F6"/>
+          <circle cx="18" cy="-125" r="4" fill="#64B5F6"/>
+
+          <!-- Question marks floating around (confused) -->
+          <text x="-48" y="-70" font-family="Fredoka, sans-serif" font-size="16" font-weight="700" fill="#90CAF9">?</text>
+          <text x="38" y="-55" font-family="Fredoka, sans-serif" font-size="14" font-weight="700" fill="#90CAF9">?</text>
+        </g>
+      </svg>
+    </div>
+  </div>
+
+  <!-- Bob's mirror-written note -->
+  <div class="mirror-note">
+    <div class="note-from">Bob's note to Scribble</div>
+    <div class="mirror-text">IH ELBBRICS! I MA BOB.</div>
+  </div>
+
+  <!-- Decode section -->
+  <div class="decode-section">
+    <div class="decode-prompt" style="flex: 1;">
+      <div class="decode-label">&#x1F50D; Decode it! What does Bob's note really say?</div>
+      <div class="decode-line"><div class="midline"></div></div>
+      <div class="decode-line"><div class="midline"></div></div>
+    </div>
+  </div>
+
+  <div class="parent-note">
+    <div class="note-label">&#x1F9E9; For parents</div>
+    <p>Read the story aloud with energy! When you get to the mirror note, let him try to figure it out. Hints: "What if you read each word backwards?" The answer is: <strong>"HI SCRIBBLE! I AM BOB."</strong> If he gets stuck, work through the first word together, then let him try the rest. This is playful decoding, not a test.</p>
+  </div>
+
+  <span class="page-footer">Monster Letters &bull; Day 4</span>
+  <span class="page-number">1</span>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 2: SPEED DRILL 1 — LETTER WARM-UP (b/d/p/q focus)      -->
+<!-- ============================================================ -->
+<div class="page">
+
+  <div class="drill-header">
+    <span class="phase-badge">Phase 2 &bull; Drill 1</span>
+    <h2>Letter Warm-Up</h2>
+    <span class="timer-badge">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="13" r="9"/><path d="M12 9v4l2.5 2.5"/><path d="M10 2h4"/></svg>
+      2 min
+    </span>
+  </div>
+
+  <div class="instructions">
+    <div class="icon">&#x1F500;</div>
+    <p>Bob does everything backwards &mdash; even his letters! <strong>Write each letter 5 times, fast.</strong> These are the letters that like to play tricks and flip around. Show Bob how they REALLY look!</p>
+  </div>
+
+  <div class="sprint-section">
+    <!-- b row -->
+    <div class="sprint-pair-label">Watch out &mdash; these two are sneaky twins!</div>
+    <div class="sprint-row">
+      <div class="sprint-letter">b</div>
+      <div class="sprint-line"><div class="midline"></div></div>
+    </div>
+    <div class="sprint-row">
+      <div class="sprint-letter">d</div>
+      <div class="sprint-line"><div class="midline"></div></div>
+    </div>
+
+    <div style="height: 10px;"></div>
+    <div class="sprint-pair-label">Another tricky pair!</div>
+    <div class="sprint-row">
+      <div class="sprint-letter">p</div>
+      <div class="sprint-line"><div class="midline"></div></div>
+    </div>
+    <div class="sprint-row">
+      <div class="sprint-letter">q</div>
+      <div class="sprint-line"><div class="midline"></div></div>
+    </div>
+  </div>
+
+  <div style="text-align: center; margin: 12px 0 6px;">
+    <svg viewBox="0 0 420 55" width="380" height="50">
+      <rect x="60" y="4" width="300" height="46" rx="10" fill="#E3F2FD" stroke="#90CAF9" stroke-width="2"/>
+      <!-- Bob mini icon -->
+      <ellipse cx="90" cy="27" rx="14" ry="16" fill="#42A5F5"/>
+      <circle cx="86" cy="22" r="3" fill="white"/>
+      <circle cx="96" cy="22" r="3" fill="white"/>
+      <circle cx="85" cy="22" r="1.8" fill="#1A237E"/>
+      <circle cx="98" cy="22" r="1.8" fill="#1A237E"/>
+      <path d="M 85 30 Q 90 33 96 30" stroke="#1A237E" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+      <text x="240" y="23" font-family="Fredoka, sans-serif" font-size="12" font-weight="600" fill="#1565C0" text-anchor="middle">Bob says: "But aren't b and d</text>
+      <text x="240" y="38" font-family="Fredoka, sans-serif" font-size="12" font-weight="600" fill="#1565C0" text-anchor="middle">the same letter?" (They're NOT, Bob!)</text>
+    </svg>
+  </div>
+
+  <div class="parent-note">
+    <div class="note-label">&#x1F9E9; Why these letters</div>
+    <p>b/d and p/q are the classic reversal pairs. The goal here is <strong>not</strong> correction &mdash; it's reps. Speed builds motor memory, and motor memory kills reversals over time. If he reverses one, say nothing during the drill. Just let him write fast. The repetition does the teaching.</p>
+  </div>
+
+  <span class="page-footer">Monster Letters &bull; Day 4</span>
+  <span class="page-number">2</span>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 3: SPEED DRILL 2 — BOB'S BACKWARDS WORDS                -->
+<!-- ============================================================ -->
+<div class="page">
+
+  <div class="drill-header">
+    <span class="phase-badge">Phase 2 &bull; Drill 2</span>
+    <h2>Bob's Backwards Words</h2>
+    <span class="timer-badge">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="13" r="9"/><path d="M12 9v4l2.5 2.5"/><path d="M10 2h4"/></svg>
+      5 min
+    </span>
+  </div>
+
+  <div class="instructions">
+    <div class="icon">&#x1F4DD;</div>
+    <p>A grown-up says the word. <strong>You write it the RIGHT way!</strong> Bob would write these all backwards, but you know better. Sound it out and go fast!</p>
+  </div>
+
+  <div class="word-grid">
+    <!-- SIT -->
+    <div class="word-card">
+      <div class="word-image">
+        <svg viewBox="0 0 60 60" width="50" height="50">
+          <!-- Chair -->
+          <rect x="16" y="14" width="24" height="4" rx="2" fill="#E8D5F5" stroke="#9B6DD7" stroke-width="1.5"/>
+          <rect x="14" y="14" width="4" height="34" rx="2" fill="#9B6DD7"/>
+          <rect x="38" y="18" width="4" height="14" rx="2" fill="#9B6DD7"/>
+          <rect x="14" y="44" width="28" height="4" rx="2" fill="#E8D5F5" stroke="#9B6DD7" stroke-width="1.5"/>
+          <!-- Person sitting (stick figure) -->
+          <circle cx="30" cy="8" r="4" fill="#9B6DD7" opacity="0.5"/>
+          <path d="M 30 12 L 30 22 L 24 30 M 30 22 L 36 30" stroke="#9B6DD7" stroke-width="1.5" fill="none" opacity="0.5" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="word-write">
+        <div class="word-number">#1</div>
+        <div class="word-write-line"><div class="midline"></div></div>
+      </div>
+    </div>
+
+    <!-- MOP -->
+    <div class="word-card">
+      <div class="word-image">
+        <svg viewBox="0 0 60 60" width="50" height="50">
+          <!-- Mop handle -->
+          <line x1="30" y1="6" x2="30" y2="38" stroke="#9B6DD7" stroke-width="3" stroke-linecap="round"/>
+          <!-- Mop head -->
+          <path d="M 18 38 Q 20 52 24 50 Q 26 38 28 52 Q 30 38 32 52 Q 34 38 36 50 Q 40 52 42 38" stroke="#9B6DD7" stroke-width="2" fill="none" stroke-linecap="round"/>
+          <line x1="18" y1="38" x2="42" y2="38" stroke="#9B6DD7" stroke-width="2.5" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="word-write">
+        <div class="word-number">#2</div>
+        <div class="word-write-line"><div class="midline"></div></div>
+      </div>
+    </div>
+
+    <!-- HEN -->
+    <div class="word-card">
+      <div class="word-image">
+        <svg viewBox="0 0 60 60" width="50" height="50">
+          <!-- Hen body -->
+          <ellipse cx="28" cy="34" rx="16" ry="12" fill="#E8D5F5" stroke="#9B6DD7" stroke-width="1.5"/>
+          <!-- Head -->
+          <circle cx="42" cy="24" r="7" fill="#E8D5F5" stroke="#9B6DD7" stroke-width="1.5"/>
+          <!-- Beak -->
+          <polygon points="49,24 56,22 49,20" fill="#FFB74D" stroke="#FF9800" stroke-width="1"/>
+          <!-- Eye -->
+          <circle cx="44" cy="22" r="1.5" fill="#2D1B4E"/>
+          <!-- Comb -->
+          <path d="M 40 17 Q 42 12 44 17 Q 46 12 48 17" fill="#EF5350" stroke="#EF5350" stroke-width="1"/>
+          <!-- Legs -->
+          <line x1="24" y1="44" x2="22" y2="54" stroke="#FFB74D" stroke-width="2" stroke-linecap="round"/>
+          <line x1="32" y1="44" x2="34" y2="54" stroke="#FFB74D" stroke-width="2" stroke-linecap="round"/>
+          <!-- Tail feathers -->
+          <path d="M 12 30 Q 6 22 10 18" stroke="#9B6DD7" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+          <path d="M 14 28 Q 8 24 12 20" stroke="#9B6DD7" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="word-write">
+        <div class="word-number">#3</div>
+        <div class="word-write-line"><div class="midline"></div></div>
+      </div>
+    </div>
+
+    <!-- JAM -->
+    <div class="word-card">
+      <div class="word-image">
+        <svg viewBox="0 0 60 60" width="50" height="50">
+          <!-- Jam jar -->
+          <rect x="16" y="22" width="28" height="30" rx="4" fill="#E8D5F5" stroke="#9B6DD7" stroke-width="2"/>
+          <!-- Lid -->
+          <rect x="18" y="16" width="24" height="8" rx="3" fill="#EF5350" stroke="#C62828" stroke-width="1.5"/>
+          <!-- Label -->
+          <rect x="20" y="30" width="20" height="14" rx="2" fill="white" stroke="#9B6DD7" stroke-width="1" opacity="0.8"/>
+          <!-- Jam inside (visible at top) -->
+          <rect x="18" y="24" width="24" height="8" rx="2" fill="#EF5350" opacity="0.3"/>
+        </svg>
+      </div>
+      <div class="word-write">
+        <div class="word-number">#4</div>
+        <div class="word-write-line"><div class="midline"></div></div>
+      </div>
+    </div>
+
+    <!-- WEB -->
+    <div class="word-card">
+      <div class="word-image">
+        <svg viewBox="0 0 60 60" width="50" height="50">
+          <!-- Spider web -->
+          <line x1="30" y1="5" x2="30" y2="55" stroke="#9B6DD7" stroke-width="1.2"/>
+          <line x1="5" y1="30" x2="55" y2="30" stroke="#9B6DD7" stroke-width="1.2"/>
+          <line x1="10" y1="10" x2="50" y2="50" stroke="#9B6DD7" stroke-width="1.2"/>
+          <line x1="50" y1="10" x2="10" y2="50" stroke="#9B6DD7" stroke-width="1.2"/>
+          <!-- Web rings -->
+          <circle cx="30" cy="30" r="8" fill="none" stroke="#9B6DD7" stroke-width="1" opacity="0.6"/>
+          <circle cx="30" cy="30" r="16" fill="none" stroke="#9B6DD7" stroke-width="1" opacity="0.5"/>
+          <circle cx="30" cy="30" r="23" fill="none" stroke="#9B6DD7" stroke-width="1" opacity="0.4"/>
+          <!-- Tiny spider -->
+          <circle cx="36" cy="22" r="2.5" fill="#2D1B4E"/>
+          <circle cx="36" cy="25" r="3" fill="#2D1B4E"/>
+        </svg>
+      </div>
+      <div class="word-write">
+        <div class="word-number">#5</div>
+        <div class="word-write-line"><div class="midline"></div></div>
+      </div>
+    </div>
+
+    <!-- ZIP -->
+    <div class="word-card">
+      <div class="word-image">
+        <svg viewBox="0 0 60 60" width="50" height="50">
+          <!-- Zipper track -->
+          <rect x="26" y="8" width="8" height="44" rx="2" fill="#E8D5F5" stroke="#9B6DD7" stroke-width="1.5"/>
+          <!-- Zipper teeth -->
+          <line x1="26" y1="14" x2="22" y2="14" stroke="#9B6DD7" stroke-width="2" stroke-linecap="round"/>
+          <line x1="34" y1="14" x2="38" y2="14" stroke="#9B6DD7" stroke-width="2" stroke-linecap="round"/>
+          <line x1="26" y1="22" x2="22" y2="22" stroke="#9B6DD7" stroke-width="2" stroke-linecap="round"/>
+          <line x1="34" y1="22" x2="38" y2="22" stroke="#9B6DD7" stroke-width="2" stroke-linecap="round"/>
+          <line x1="26" y1="30" x2="22" y2="30" stroke="#9B6DD7" stroke-width="2" stroke-linecap="round"/>
+          <line x1="34" y1="30" x2="38" y2="30" stroke="#9B6DD7" stroke-width="2" stroke-linecap="round"/>
+          <!-- Zipper pull -->
+          <rect x="27" y="34" width="6" height="8" rx="2" fill="#9B6DD7"/>
+          <circle cx="30" cy="44" r="3" fill="#9B6DD7" stroke="#7B4DB7" stroke-width="1"/>
+        </svg>
+      </div>
+      <div class="word-write">
+        <div class="word-number">#6</div>
+        <div class="word-write-line"><div class="midline"></div></div>
+      </div>
+    </div>
+
+    <!-- FUN -->
+    <div class="word-card">
+      <div class="word-image">
+        <svg viewBox="0 0 60 60" width="50" height="50">
+          <!-- Smiley face -->
+          <circle cx="30" cy="30" r="22" fill="#FFF9C4" stroke="#FFB74D" stroke-width="2"/>
+          <!-- Eyes -->
+          <circle cx="22" cy="24" r="3" fill="#2D1B4E"/>
+          <circle cx="38" cy="24" r="3" fill="#2D1B4E"/>
+          <!-- Big smile -->
+          <path d="M 18 34 Q 30 46 42 34" stroke="#2D1B4E" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+          <!-- Sparkles -->
+          <text x="8" y="14" font-size="8" fill="#FFB74D">&#x2728;</text>
+          <text x="48" y="14" font-size="8" fill="#FFB74D">&#x2728;</text>
+        </svg>
+      </div>
+      <div class="word-write">
+        <div class="word-number">#7</div>
+        <div class="word-write-line"><div class="midline"></div></div>
+      </div>
+    </div>
+
+    <!-- VAN -->
+    <div class="word-card">
+      <div class="word-image">
+        <svg viewBox="0 0 60 60" width="50" height="50">
+          <!-- Van body -->
+          <rect x="6" y="18" width="40" height="22" rx="4" fill="#E8D5F5" stroke="#9B6DD7" stroke-width="2"/>
+          <!-- Cab/front -->
+          <path d="M 46 22 L 52 22 Q 56 22 56 26 L 56 40 L 46 40 Z" fill="#E8D5F5" stroke="#9B6DD7" stroke-width="2"/>
+          <!-- Windshield -->
+          <path d="M 47 24 L 52 24 Q 54 24 54 27 L 54 32 L 47 32 Z" fill="#90CAF9" stroke="#9B6DD7" stroke-width="1"/>
+          <!-- Window on side -->
+          <rect x="12" y="22" width="14" height="10" rx="2" fill="#90CAF9" stroke="#9B6DD7" stroke-width="1"/>
+          <!-- Wheels -->
+          <circle cx="16" cy="42" r="6" fill="#9B6DD7"/>
+          <circle cx="16" cy="42" r="3" fill="#E8D5F5"/>
+          <circle cx="46" cy="42" r="6" fill="#9B6DD7"/>
+          <circle cx="46" cy="42" r="3" fill="#E8D5F5"/>
+          <!-- Ground line -->
+          <line x1="4" y1="48" x2="58" y2="48" stroke="#9B6DD7" stroke-width="1" opacity="0.3"/>
+        </svg>
+      </div>
+      <div class="word-write">
+        <div class="word-number">#8</div>
+        <div class="word-write-line"><div class="midline"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCORING -->
+  <div class="score-section">
+    <div class="score-box">
+      <div class="score-label">Words Tried</div>
+      <div class="score-value">&nbsp;</div>
+      <div class="score-max">out of 8</div>
+    </div>
+    <div class="score-box bonus">
+      <div class="score-label">Bonus (readable)</div>
+      <div class="score-value">&nbsp;</div>
+      <div class="score-max">out of 8</div>
+    </div>
+    <div class="score-box total">
+      <div class="score-label">Day 4 Total</div>
+      <div class="score-value">&nbsp;</div>
+      <div class="score-max">out of 16</div>
+    </div>
+  </div>
+
+  <div class="parent-note" style="margin-top: 14px;">
+    <div class="note-label">&#x1F4CA; Weekly tracker</div>
+    <p>Write today's total here: _____. Compare with Day 1 (___), Day 2 (___), Day 3 (___). By Day 4, most kids see their scores going up. Point it out if so! "Look &mdash; you're getting faster every day!"</p>
+  </div>
+
+  <span class="page-footer">Monster Letters &bull; Day 4</span>
+  <span class="page-number">3</span>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 4: CHALLENGE — WRITE BOB A NOTE                         -->
+<!-- ============================================================ -->
+<div class="page">
+
+  <div class="drill-header">
+    <span class="phase-badge">Phase 3</span>
+    <h2>Help Bob Get It Right!</h2>
+    <span class="timer-badge">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="13" r="9"/><path d="M12 9v4l2.5 2.5"/><path d="M10 2h4"/></svg>
+      5 min
+    </span>
+  </div>
+
+  <div class="instructions">
+    <div class="icon">&#x270F;&#xFE0F;</div>
+    <p>Poor Bob walked into Scribble's house <strong>backwards through the back door!</strong> Write him a note explaining how to walk into a house <strong>the right way.</strong> 2&ndash;3 sentences!</p>
+  </div>
+
+  <div class="challenge-prompt-box">
+    <div class="prompt-label">Start like this (or write your own!)</div>
+    <p>"Dear Bob, first you go to the <strong>_____</strong> door. Then you say <strong>_____</strong>."</p>
+  </div>
+
+  <div class="writing-line"><div class="midline"></div></div>
+  <div class="writing-line"><div class="midline"></div></div>
+  <div class="writing-line"><div class="midline"></div></div>
+  <div class="writing-line"><div class="midline"></div></div>
+  <div class="writing-line"><div class="midline"></div></div>
+  <div class="writing-line"><div class="midline"></div></div>
+  <div class="writing-line"><div class="midline"></div></div>
+
+  <!-- Drawing area -->
+  <div class="drawing-area">
+    <div class="draw-prompt">
+      &#x1F3A8; Draw Bob walking into the house backwards!<br>What does it look like when someone goes through a door the wrong way?
+    </div>
+  </div>
+
+  <div style="margin-top: 10px; display: flex; justify-content: flex-end;">
+    <!-- Small Bob waving -->
+    <svg viewBox="0 0 80 100" width="70" height="85">
+      <g transform="translate(40,55)">
+        <rect x="-14" y="10" width="28" height="30" rx="12" fill="#42A5F5"/>
+        <ellipse cx="0" cy="-10" rx="16" ry="14" fill="#42A5F5"/>
+        <ellipse cx="-7" cy="-12" rx="5" ry="6" fill="white"/>
+        <ellipse cx="7" cy="-12" rx="5" ry="6" fill="white"/>
+        <circle cx="-9" cy="-12" r="3" fill="#1A237E"/>
+        <circle cx="9" cy="-11" r="3" fill="#1A237E"/>
+        <circle cx="-10" cy="-14" r="1.2" fill="white"/>
+        <circle cx="10" cy="-13" r="1.2" fill="white"/>
+        <path d="M -6 -2 Q 0 3 6 -2" stroke="#1A237E" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+        <path d="M 14 8 Q 26 -2 28 -10" stroke="#2979FF" stroke-width="5" fill="none" stroke-linecap="round"/>
+        <circle cx="29" cy="-12" r="4" fill="#2979FF"/>
+        <rect x="-10" y="38" width="8" height="14" rx="4" fill="#2979FF"/>
+        <rect x="2" y="38" width="8" height="14" rx="4" fill="#2979FF"/>
+      </g>
+    </svg>
+  </div>
+
+  <span class="page-footer">Monster Letters &bull; Day 4</span>
+  <span class="page-number">4</span>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 5: PARENT GUIDE                                         -->
+<!-- ============================================================ -->
+<div class="page">
+
+  <div class="drill-header">
+    <span class="phase-badge">For Parents</span>
+    <h2>Day 4 Guide</h2>
+  </div>
+
+  <div class="timing-strip">
+    <div class="timing-block">
+      <div class="t-phase">Phase 1</div>
+      <div class="t-time">2 min</div>
+      <div class="t-desc">Story + decode note</div>
+    </div>
+    <div class="timing-block">
+      <div class="t-phase">Phase 2</div>
+      <div class="t-time">7 min</div>
+      <div class="t-desc">Letters + dictation</div>
+    </div>
+    <div class="timing-block">
+      <div class="t-phase">Phase 3</div>
+      <div class="t-time">5 min</div>
+      <div class="t-desc">Note to Bob + drawing</div>
+    </div>
+  </div>
+
+  <div class="script-box">
+    <div class="script-label">What's new today</div>
+    <p><strong>New character &mdash; Backwards Bob!</strong> Bob is tall, blue, friendly, and confused. He does everything in reverse. Today introduces the concept of letter reversals through a character who mixes everything up &mdash; making it funny instead of frustrating. The mirror-writing note is a playful decoding activity, not a handwriting test.</p>
+  </div>
+
+  <div class="script-box">
+    <div class="script-label">Phase 1 &mdash; The mirror note</div>
+    <p>Bob's note reads "IH ELBBRICS! I MA BOB." which decodes to "HI SCRIBBLE! I AM BOB." Work through it together. You can hold the page up to a mirror for a fun "aha!" moment, or just reverse each word letter by letter. Let him write the decoded version in the lines below the note. This is warm-up writing disguised as puzzle-solving.</p>
+  </div>
+
+  <div class="script-box">
+    <div class="script-label">Phase 2 &mdash; Letter Warm-Up (b/d/p/q)</div>
+    <p>Today's letter drill focuses on commonly reversed letters: <strong>b, d, p, q.</strong> The framing is that Bob mixes these up because he does everything backwards. Your child writes each letter 5 times fast. <strong>Do not correct reversals during the drill.</strong> Speed and repetition build the motor memory that prevents reversals naturally. If he reverses a letter, the reps themselves are the fix.</p>
+  </div>
+
+  <div class="script-box">
+    <div class="script-label">Phase 2 &mdash; Bob's Backwards Words</div>
+    <p>Dictation format &mdash; you say the word forward, he writes it forward. Words: <strong>SIT, MOP, HEN, JAM, WEB, ZIP, FUN, VAN.</strong> The joke is that Bob would write them all backwards, but your child is "fixing" them. Same scoring as previous days: 1 point for attempting, bonus for readable. Track the week total &mdash; tomorrow is the last day to set records!</p>
+  </div>
+
+  <div class="script-box">
+    <div class="script-label">Phase 3 &mdash; The challenge</div>
+    <p>He writes Bob a note explaining how to walk into a house correctly. The prompt template ("Dear Bob, first you go to the _____ door. Then you say _____.") gives structure, but he can write his own version. 2&ndash;3 sentences is the target. The drawing prompt asks him to draw Bob walking in backwards &mdash; this is a reward for finishing the writing, and kids love drawing monsters doing silly things.</p>
+  </div>
+
+  <div class="guide-grid">
+    <div class="guide-box do-box">
+      <h3>Day 4 Wins</h3>
+      <ul>
+        <li>He decoded Bob's mirror note (with help is fine!)</li>
+        <li>He attempted all 4 reversal letters (b, d, p, q)</li>
+        <li>He attempted all 8 dictation words</li>
+        <li>He wrote at least 2 sentences to Bob</li>
+        <li>Session stayed under 15 minutes</li>
+      </ul>
+    </div>
+    <div class="guide-box dont-box">
+      <h3>Watch for</h3>
+      <ul>
+        <li>Anxiety about b/d reversals &mdash; "Bob gets them wrong too, and he's fine!"</li>
+        <li>Trying to write the mirror note backwards himself &mdash; fun but save it for later</li>
+        <li>Getting stuck on the challenge &mdash; the template is there to help, use it!</li>
+        <li>Spending too long on the drawing &mdash; drawing is the reward, but keep the timer going</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="parent-note" style="margin-top: 14px;">
+    <div class="note-label">&#x1F4AC; Looking ahead</div>
+    <p><strong>Tomorrow (Day 5)</strong> is the Monster Party &mdash; the Week 1 finale! All three monsters throw a party, and your child does all the writing. He'll revisit his letter-sprint records from Day 2 and try to beat them. It's a celebration day. If he's been tracking scores, tomorrow is when they all pay off.</p>
+  </div>
+
+  <span class="page-footer">Monster Letters &bull; Day 4</span>
+  <span class="page-number">5</span>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,1273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Monster Letters — Day 3: Speedster Shows Up</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Patrick+Hand&family=Caveat:wght@700&display=swap');
+
+  :root {
+    --purple-dark: #6B3FA0;
+    --purple-mid: #9B6DD7;
+    --purple-light: #E8D5F5;
+    --purple-bg: #F5EEFA;
+    --green-accent: #4CAF50;
+    --orange-accent: #FF9800;
+    --yellow-accent: #FFD54F;
+    --red-accent: #EF5350;
+    --gray-line: #CCBBDD;
+    --gray-light: #F0F0F0;
+    --text-dark: #2D1B4E;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Fredoka', sans-serif;
+    color: var(--text-dark);
+    background: #FAFAFA;
+  }
+
+  @media print {
+    body { background: white; }
+    .page {
+      page-break-after: always;
+      box-shadow: none !important;
+      margin: 0 !important;
+      border-radius: 0 !important;
+    }
+    .page:last-child { page-break-after: avoid; }
+    .no-print { display: none !important; }
+    @page { margin: 0.5in; size: letter; }
+  }
+
+  @media screen {
+    body { padding: 20px; background: #E8D5F5; }
+    .page {
+      max-width: 8.5in;
+      margin: 30px auto;
+      box-shadow: 0 4px 20px rgba(107, 63, 160, 0.2);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+  }
+
+  .page {
+    width: 8.5in;
+    min-height: 10in;
+    background: white;
+    padding: 0.5in;
+    position: relative;
+  }
+
+  /* ---------- SHARED COMPONENTS ---------- */
+  .cover-header {
+    text-align: center;
+    margin-bottom: 15px;
+  }
+
+  .cover-header .series-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--purple-mid);
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-bottom: 2px;
+  }
+
+  .cover-header h1 {
+    font-size: 38px;
+    font-weight: 700;
+    color: var(--purple-dark);
+    line-height: 1.1;
+    margin-bottom: 2px;
+  }
+
+  .cover-header .day-label {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--purple-mid);
+  }
+
+  .drill-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 3px solid var(--purple-light);
+  }
+
+  .drill-header .phase-badge {
+    background: var(--purple-dark);
+    color: white;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 20px;
+    white-space: nowrap;
+  }
+
+  .drill-header h2 {
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--purple-dark);
+    flex: 1;
+  }
+
+  .drill-header .timer-badge {
+    background: var(--red-accent);
+    color: white;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .timer-icon {
+    display: inline-block;
+  }
+
+  .timer-icon svg {
+    vertical-align: middle;
+  }
+
+  .instructions {
+    background: var(--purple-bg);
+    border-radius: 10px;
+    padding: 12px 16px;
+    margin-bottom: 16px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+
+  .instructions .icon {
+    font-size: 24px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .instructions p {
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  .instructions strong {
+    color: var(--purple-dark);
+  }
+
+  .story-box {
+    background: var(--purple-bg);
+    border-radius: 12px;
+    padding: 16px 18px;
+    border-left: 4px solid var(--purple-mid);
+    margin-bottom: 12px;
+  }
+
+  .story-box .read-aloud {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--purple-mid);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+  }
+
+  .story-box p {
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--text-dark);
+  }
+
+  .parent-note {
+    background: #FFF3E0;
+    border-radius: 8px;
+    padding: 10px 14px;
+    margin-top: 12px;
+    border: 1px solid #FFE0B2;
+  }
+
+  .parent-note .note-label {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--orange-accent);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .parent-note p {
+    font-size: 12px;
+    line-height: 1.5;
+    color: #5D4037;
+    margin-top: 3px;
+  }
+
+  .writing-prompt {
+    background: var(--purple-bg);
+    border-radius: 12px;
+    padding: 14px 20px;
+    margin: 12px 0 16px;
+    text-align: center;
+    border: 2px solid var(--purple-light);
+  }
+
+  .writing-prompt p {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--purple-dark);
+  }
+
+  .writing-prompt .sub {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--purple-mid);
+    margin-top: 4px;
+  }
+
+  .writing-line {
+    height: 40px;
+    border-bottom: 2px solid var(--gray-line);
+    position: relative;
+    margin-bottom: 2px;
+  }
+
+  .writing-line .midline {
+    position: absolute;
+    bottom: 16px;
+    left: 0;
+    right: 0;
+    border-bottom: 1px dashed #E0D0F0;
+  }
+
+  .score-section {
+    display: flex;
+    gap: 16px;
+    align-items: stretch;
+  }
+
+  .score-box {
+    flex: 1;
+    border: 2px solid var(--purple-light);
+    border-radius: 12px;
+    padding: 14px;
+    text-align: center;
+  }
+
+  .score-box .score-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--purple-mid);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+  }
+
+  .score-box .score-value {
+    font-size: 42px;
+    font-weight: 700;
+    color: var(--purple-dark);
+    line-height: 1;
+  }
+
+  .score-box .score-max {
+    font-size: 14px;
+    color: var(--purple-mid);
+    font-weight: 500;
+  }
+
+  .score-box.bonus {
+    background: #FFF8E1;
+    border-color: var(--yellow-accent);
+  }
+
+  .score-box.total {
+    background: var(--purple-bg);
+    border-color: var(--purple-mid);
+  }
+
+  .page-number {
+    position: absolute;
+    bottom: 20px;
+    right: 30px;
+    font-size: 12px;
+    color: var(--gray-line);
+    font-weight: 600;
+  }
+
+  .page-footer {
+    position: absolute;
+    bottom: 20px;
+    left: 30px;
+    font-size: 10px;
+    color: var(--gray-line);
+    font-weight: 500;
+  }
+
+  /* ---------- PAGE 1: SPEEDSTER'S JUMBLED LABELS ---------- */
+  .jumbled-labels-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 16px;
+    margin: 16px 0;
+  }
+
+  .jumbled-label-card {
+    border: 2px solid var(--purple-light);
+    border-radius: 14px;
+    overflow: hidden;
+    text-align: center;
+  }
+
+  .jumbled-label-card .item-drawing {
+    background: var(--purple-bg);
+    padding: 14px;
+    min-height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .jumbled-label-card .jumbled-tag {
+    background: #4CAF50;
+    color: white;
+    font-family: 'Caveat', cursive;
+    font-size: 22px;
+    padding: 6px 12px;
+    transform: rotate(-3deg);
+    display: inline-block;
+    border-radius: 4px;
+    margin: -10px auto 8px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .jumbled-label-card .correct-area {
+    padding: 8px 14px 14px;
+  }
+
+  .jumbled-label-card .correct-prompt {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--green-accent);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+  }
+
+  .jumbled-label-card .correct-line {
+    border-bottom: 2px solid var(--gray-line);
+    height: 30px;
+    position: relative;
+  }
+
+  .jumbled-label-card .correct-line .midline {
+    position: absolute;
+    bottom: 12px;
+    left: 0;
+    right: 0;
+    border-bottom: 1px dashed #E0D0F0;
+  }
+
+  /* ---------- PAGE 2: SPEEDSTER CHALLENGE ---------- */
+  .speedster-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+    padding: 6px 12px;
+    border: 2px solid var(--purple-light);
+    border-radius: 10px;
+  }
+
+  .speedster-row:nth-child(even) {
+    background: var(--purple-bg);
+  }
+
+  .speedster-round-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--purple-mid);
+    text-transform: uppercase;
+    width: 60px;
+    text-align: center;
+    flex-shrink: 0;
+  }
+
+  .speedster-letter-box {
+    width: 50px;
+    height: 50px;
+    border: 2px dashed var(--gray-line);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    color: var(--gray-line);
+    font-weight: 600;
+    flex-shrink: 0;
+  }
+
+  .speedster-write-line {
+    flex: 1;
+    height: 50px;
+    border-bottom: 2px solid var(--gray-line);
+    position: relative;
+  }
+
+  .speedster-write-line .midline {
+    position: absolute;
+    bottom: 20px;
+    left: 0;
+    right: 0;
+    border-bottom: 1px dashed #E0D0F0;
+  }
+
+  .speedster-count {
+    flex-shrink: 0;
+    width: 65px;
+    text-align: center;
+  }
+
+  .count-box {
+    border: 2px solid var(--gray-line);
+    border-radius: 8px;
+    padding: 4px 6px;
+    font-size: 10px;
+    color: var(--gray-line);
+    font-weight: 600;
+  }
+
+  .count-box .count-val {
+    font-size: 20px;
+    color: var(--purple-dark);
+    line-height: 1.2;
+  }
+
+  /* ---------- PAGE 3: WORD FIX (UNSCRAMBLE) ---------- */
+  .unscramble-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 20px;
+  }
+
+  .unscramble-card {
+    border: 2px solid var(--purple-light);
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    min-height: 80px;
+  }
+
+  .unscramble-card .scrambled-word {
+    width: 90px;
+    background: #E8F5E9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-right: 2px solid var(--purple-light);
+    flex-shrink: 0;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .unscramble-card .scrambled-word .scrambled-text {
+    font-family: 'Caveat', cursive;
+    font-size: 28px;
+    color: #2E7D32;
+    font-weight: 700;
+    transform: rotate(-2deg);
+  }
+
+  .unscramble-card .scrambled-word .arrow-hint {
+    font-size: 16px;
+    color: #81C784;
+  }
+
+  .unscramble-card .word-fix-write {
+    flex: 1;
+    padding: 8px 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .unscramble-card .word-number {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--purple-mid);
+    margin-bottom: 4px;
+  }
+
+  .word-fix-line {
+    border-bottom: 2px solid var(--gray-line);
+    height: 36px;
+    position: relative;
+  }
+
+  .word-fix-line .midline {
+    position: absolute;
+    bottom: 14px;
+    left: 0;
+    right: 0;
+    border-bottom: 1px dashed #E0D0F0;
+  }
+
+  /* ---------- PAGE 4: CHALLENGE ---------- */
+  .race-section {
+    border: 3px solid var(--green-accent);
+    border-radius: 14px;
+    padding: 16px;
+    margin-bottom: 16px;
+    background: #F1F8E9;
+  }
+
+  .race-section .race-label {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--green-accent);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+  }
+
+  .bonus-section {
+    margin-top: 16px;
+    border: 2px dashed var(--yellow-accent);
+    border-radius: 12px;
+    padding: 16px;
+    background: #FFFDE7;
+  }
+
+  .bonus-section .bonus-label {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--orange-accent);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+  }
+
+  .drawing-area {
+    border: 2px dashed var(--gray-line);
+    border-radius: 12px;
+    min-height: 160px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 10px;
+  }
+
+  .drawing-area p {
+    font-size: 13px;
+    color: var(--gray-line);
+    font-weight: 500;
+  }
+
+  /* ---------- PAGE 5: PARENT GUIDE ---------- */
+  .timing-strip {
+    display: flex;
+    gap: 0;
+    margin: 14px 0;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 2px solid var(--purple-light);
+  }
+
+  .timing-block {
+    flex: 1;
+    padding: 12px;
+    text-align: center;
+  }
+
+  .timing-block:not(:last-child) {
+    border-right: 2px solid var(--purple-light);
+  }
+
+  .timing-block .t-phase {
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 3px;
+  }
+
+  .timing-block .t-time {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--purple-dark);
+  }
+
+  .timing-block .t-desc {
+    font-size: 11px;
+    color: #888;
+    margin-top: 2px;
+  }
+
+  .timing-block:nth-child(1) { background: #F3E5F5; }
+  .timing-block:nth-child(1) .t-phase { color: #9C27B0; }
+  .timing-block:nth-child(2) { background: #FFF3E0; }
+  .timing-block:nth-child(2) .t-phase { color: #FF9800; }
+  .timing-block:nth-child(3) { background: #E8F5E9; }
+  .timing-block:nth-child(3) .t-phase { color: #4CAF50; }
+
+  .script-box {
+    background: #F5F5F5;
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin: 10px 0;
+    border-left: 4px solid var(--purple-mid);
+  }
+
+  .script-box .script-label {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--purple-mid);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+  }
+
+  .script-box p {
+    font-size: 13px;
+    line-height: 1.6;
+  }
+
+  .guide-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 12px;
+  }
+
+  .guide-box {
+    border: 2px solid var(--purple-light);
+    border-radius: 12px;
+    padding: 14px;
+  }
+
+  .guide-box.do-box {
+    border-color: var(--green-accent);
+    background: #F1F8E9;
+  }
+
+  .guide-box.dont-box {
+    border-color: var(--red-accent);
+    background: #FFF3F0;
+  }
+
+  .guide-box h3 {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  .guide-box.do-box h3 { color: var(--green-accent); }
+  .guide-box.dont-box h3 { color: var(--red-accent); }
+
+  .guide-box ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  .guide-box li {
+    font-size: 13px;
+    line-height: 1.5;
+    padding: 3px 0;
+    padding-left: 18px;
+    position: relative;
+  }
+
+  .guide-box.do-box li::before {
+    content: "\2713";
+    position: absolute;
+    left: 0;
+    color: var(--green-accent);
+    font-weight: 700;
+  }
+
+  .guide-box.dont-box li::before {
+    content: "\2717";
+    position: absolute;
+    left: 0;
+    color: var(--red-accent);
+    font-weight: 700;
+  }
+</style>
+</head>
+<body>
+
+<!-- ============================================================ -->
+<!-- PAGE 1: COVER & STORY                                        -->
+<!-- ============================================================ -->
+<div class="page">
+
+  <div class="cover-header">
+    <div class="series-title">Monster Letters</div>
+    <h1>Speedster Shows Up</h1>
+    <div class="day-label">Day 3 &bull; Week 1</div>
+  </div>
+
+  <div style="display: flex; gap: 20px; align-items: flex-start; margin-bottom: 12px;">
+    <div style="flex: 1;">
+      <div class="story-box">
+        <div class="read-aloud">&#x1F4D6; Read aloud</div>
+        <p>Scribble's friend <strong>Speedster</strong> came to visit! Speedster is a little green monster who does everything <strong>SO FAST.</strong> He ran into the kitchen, knocked over all the labels, and wrote new ones &mdash; but he went so fast that the words are all <strong>jumbled!</strong></p>
+        <p style="margin-top:8px;">He wrote <strong>"UPC"</strong> instead of CUP, <strong>"OTP"</strong> instead of POT, and <strong>"ROFK"</strong> instead of FORK. Can you figure out what he meant?</p>
+      </div>
+    </div>
+
+    <!-- Speedster illustration -->
+    <div style="flex: 0 0 160px;">
+      <svg viewBox="0 0 160 190" xmlns="http://www.w3.org/2000/svg" width="160" height="190">
+        <!-- Motion lines behind Speedster -->
+        <line x1="5" y1="80" x2="30" y2="80" stroke="#81C784" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+        <line x1="10" y1="95" x2="35" y2="95" stroke="#81C784" stroke-width="2" stroke-linecap="round" opacity="0.4"/>
+        <line x1="2" y1="110" x2="28" y2="110" stroke="#81C784" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+        <line x1="8" y1="125" x2="32" y2="125" stroke="#81C784" stroke-width="2" stroke-linecap="round" opacity="0.3"/>
+        <line x1="5" y1="140" x2="25" y2="140" stroke="#81C784" stroke-width="2" stroke-linecap="round" opacity="0.4"/>
+
+        <!-- Body - angular/lean, tilted forward for speed -->
+        <g transform="rotate(-8, 85, 110)">
+          <!-- Main body - more angular/triangular than Scribble's round shape -->
+          <path d="M 60 75 Q 55 90 52 120 Q 52 145 70 150 L 100 150 Q 118 145 118 120 Q 115 90 110 75 Q 85 62 60 75 Z" fill="#4CAF50"/>
+          <!-- Inner body highlight -->
+          <path d="M 68 82 Q 63 95 62 118 Q 62 138 75 142 L 95 142 Q 108 138 108 118 Q 107 95 102 82 Q 85 74 68 82 Z" fill="#66BB6A"/>
+
+          <!-- Eyes - big, excited, wide open -->
+          <ellipse cx="74" cy="98" rx="11" ry="13" fill="white"/>
+          <ellipse cx="96" cy="98" rx="11" ry="13" fill="white"/>
+          <!-- Pupils - looking forward/up with excitement -->
+          <circle cx="77" cy="96" r="6.5" fill="#1B5E20"/>
+          <circle cx="99" cy="96" r="6.5" fill="#1B5E20"/>
+          <!-- Eye shine -->
+          <circle cx="80" cy="93" r="2.5" fill="white"/>
+          <circle cx="102" cy="93" r="2.5" fill="white"/>
+          <!-- Excited eyebrows - raised -->
+          <path d="M 62 82 Q 70 76 82 82" stroke="#1B5E20" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+          <path d="M 88 82 Q 100 76 108 82" stroke="#1B5E20" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+
+          <!-- Big excited open smile -->
+          <path d="M 68 118 Q 85 135 102 118" stroke="#1B5E20" stroke-width="2.5" fill="#81C784" stroke-linecap="round"/>
+          <!-- Tongue -->
+          <ellipse cx="85" cy="124" rx="6" ry="4" fill="#E57373"/>
+
+          <!-- Ears - pointed, angular -->
+          <!-- Left ear -->
+          <path d="M 58 78 L 42 50 L 62 72" fill="#4CAF50" stroke="#388E3C" stroke-width="1.5"/>
+          <!-- Left ear lightning bolt -->
+          <path d="M 48 58 L 52 64 L 48 64 L 54 72" stroke="#FFD54F" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+
+          <!-- Right ear -->
+          <path d="M 112 78 L 128 50 L 108 72" fill="#4CAF50" stroke="#388E3C" stroke-width="1.5"/>
+          <!-- Right ear lightning bolt -->
+          <path d="M 122 58 L 118 64 L 122 64 L 116 72" stroke="#FFD54F" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+        </g>
+
+        <!-- Legs - one forward, one back (running pose) -->
+        <!-- Left leg (forward) -->
+        <path d="M 70 148 Q 55 160 48 170" stroke="#388E3C" stroke-width="6" fill="none" stroke-linecap="round"/>
+        <ellipse cx="45" cy="173" rx="12" ry="6" fill="#2E7D32"/>
+        <!-- Right leg (back) -->
+        <path d="M 95 148 Q 110 155 120 162" stroke="#388E3C" stroke-width="6" fill="none" stroke-linecap="round"/>
+        <ellipse cx="123" cy="165" rx="12" ry="6" fill="#2E7D32"/>
+
+        <!-- Arms - one reaching forward -->
+        <!-- Left arm (forward, reaching) -->
+        <path d="M 55 105 Q 35 95 25 88" stroke="#388E3C" stroke-width="5" fill="none" stroke-linecap="round"/>
+        <circle cx="23" cy="86" r="4" fill="#388E3C"/>
+        <!-- Right arm (back, trailing) -->
+        <path d="M 112 108 Q 128 115 138 120" stroke="#388E3C" stroke-width="5" fill="none" stroke-linecap="round"/>
+        <circle cx="140" cy="122" r="4" fill="#388E3C"/>
+
+        <!-- Speed dust puffs behind -->
+        <circle cx="135" cy="155" r="5" fill="#E0E0E0" opacity="0.5"/>
+        <circle cx="145" cy="148" r="4" fill="#E0E0E0" opacity="0.4"/>
+        <circle cx="150" cy="160" r="3" fill="#E0E0E0" opacity="0.3"/>
+
+        <!-- Little label flying off (the jumbled one) -->
+        <g transform="rotate(15, 28, 78)">
+          <rect x="10" y="72" width="32" height="14" rx="2" fill="#FFFDE7" stroke="#FFB74D" stroke-width="1"/>
+          <text x="26" y="83" font-family="Caveat, cursive" font-size="9" fill="#5D4037" text-anchor="middle">UPC</text>
+        </g>
+      </svg>
+    </div>
+  </div>
+
+  <!-- Speedster's jumbled labels -->
+  <p style="font-size: 15px; font-weight: 600; color: var(--purple-dark); margin-bottom: 10px;">Speedster's jumbled labels &mdash; can you decode them?</p>
+
+  <div class="jumbled-labels-grid">
+    <!-- Cup with "UPC" label -->
+    <div class="jumbled-label-card">
+      <div class="item-drawing">
+        <svg viewBox="0 0 100 90" width="90" height="80">
+          <path d="M 25 20 L 28 70 H 58 L 61 20 Z" fill="#E8D5F5" stroke="#9B6DD7" stroke-width="2"/>
+          <path d="M 61 30 Q 78 30 78 45 Q 78 58 61 58" fill="none" stroke="#9B6DD7" stroke-width="2.5"/>
+          <path d="M 25 20 H 61" stroke="#9B6DD7" stroke-width="3" stroke-linecap="round"/>
+          <path d="M 35 15 Q 33 8 37 4" stroke="#9B6DD7" stroke-width="1.5" fill="none" opacity="0.3" stroke-linecap="round"/>
+          <path d="M 45 13 Q 43 6 47 2" stroke="#9B6DD7" stroke-width="1.5" fill="none" opacity="0.3" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="jumbled-tag">UPC</div>
+      <div class="correct-area">
+        <div class="correct-prompt">Write the right word:</div>
+        <div class="correct-line"><div class="midline"></div></div>
+      </div>
+    </div>
+
+    <!-- Pot with "OTP" label -->
+    <div class="jumbled-label-card">
+      <div class="item-drawing">
+        <svg viewBox="0 0 100 90" width="90" height="80">
+          <path d="M 14 22 L 16 48 H 44 L 46 22 Z" fill="#E8D5F5" stroke="#9B6DD7" stroke-width="2" transform="translate(22,14)"/>
+          <line x1="32" y1="36" x2="72" y2="36" stroke="#9B6DD7" stroke-width="2.5" stroke-linecap="round"/>
+          <line x1="32" y1="36" x2="27" y2="36" stroke="#9B6DD7" stroke-width="2.5" stroke-linecap="round"/>
+          <line x1="72" y1="36" x2="77" y2="36" stroke="#9B6DD7" stroke-width="2.5" stroke-linecap="round"/>
+          <path d="M 40 36 Q 52 28 64 36" fill="#E8D5F5" stroke="#9B6DD7" stroke-width="1.5"/>
+          <circle cx="52" cy="29" r="3" fill="#9B6DD7"/>
+        </svg>
+      </div>
+      <div class="jumbled-tag">OTP</div>
+      <div class="correct-area">
+        <div class="correct-prompt">Write the right word:</div>
+        <div class="correct-line"><div class="midline"></div></div>
+      </div>
+    </div>
+
+    <!-- Fork with "ROFK" label -->
+    <div class="jumbled-label-card">
+      <div class="item-drawing">
+        <svg viewBox="0 0 100 90" width="90" height="80">
+          <line x1="50" y1="80" x2="50" y2="40" stroke="#9B6DD7" stroke-width="2.5" stroke-linecap="round"/>
+          <line x1="38" y1="15" x2="38" y2="44" stroke="#9B6DD7" stroke-width="2" stroke-linecap="round"/>
+          <line x1="50" y1="15" x2="50" y2="44" stroke="#9B6DD7" stroke-width="2" stroke-linecap="round"/>
+          <line x1="62" y1="15" x2="62" y2="44" stroke="#9B6DD7" stroke-width="2" stroke-linecap="round"/>
+          <path d="M 38 44 Q 50 52 62 44" stroke="#9B6DD7" stroke-width="2" fill="none"/>
+        </svg>
+      </div>
+      <div class="jumbled-tag">ROFK</div>
+      <div class="correct-area">
+        <div class="correct-prompt">Write the right word:</div>
+        <div class="correct-line"><div class="midline"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="parent-note">
+    <div class="note-label">&#x1F9E9; For parents</div>
+    <p>Introduce Speedster with energy: he's fast, he's loud, and he's GOGOGOGO! The jumbled labels are a fun puzzle before the timed drills. Let your child sound them out and decode them. If he needs a hint, say: "What word does this look like if you mix the letters around?"</p>
+  </div>
+
+  <span class="page-footer">Monster Letters &bull; Day 3</span>
+  <span class="page-number">1</span>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 2: SPEED DRILL 1 — SPEEDSTER CHALLENGE                  -->
+<!-- ============================================================ -->
+<div class="page">
+
+  <div class="drill-header">
+    <span class="phase-badge">Phase 2 &bull; Drill 1</span>
+    <h2>Speedster Challenge</h2>
+    <span class="timer-badge">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="13" r="9"/><path d="M12 9v4l2.5 2.5"/><path d="M10 2h4"/></svg>
+      3 min
+    </span>
+  </div>
+
+  <div class="instructions">
+    <div class="icon">&#x26A1;</div>
+    <p>Speedster says he can write any letter <strong>10 times in 15 seconds.</strong> Can you beat him? A grown-up picks 5 letters, sets the timer for 15 seconds each round, and you write that letter <strong>as many times as you can!</strong></p>
+  </div>
+
+  <!-- Speedster's taunt -->
+  <div style="text-align: center; margin-bottom: 12px;">
+    <svg viewBox="0 0 440 50" width="400" height="45">
+      <rect x="10" y="2" width="420" height="44" rx="22" fill="#E8F5E9" stroke="#81C784" stroke-width="2"/>
+      <!-- Small Speedster face -->
+      <circle cx="40" cy="24" r="16" fill="#4CAF50"/>
+      <circle cx="40" cy="24" r="12" fill="#66BB6A"/>
+      <ellipse cx="35" cy="22" rx="4" ry="5" fill="white"/>
+      <ellipse cx="45" cy="22" rx="4" ry="5" fill="white"/>
+      <circle cx="36" cy="21" r="2.5" fill="#1B5E20"/>
+      <circle cx="46" cy="21" r="2.5" fill="#1B5E20"/>
+      <path d="M 33 30 Q 40 35 47 30" stroke="#1B5E20" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+      <!-- Lightning ears tiny -->
+      <path d="M 28 12 L 22 4 L 30 10" fill="#4CAF50"/>
+      <path d="M 52 12 L 58 4 L 50 10" fill="#4CAF50"/>
+      <!-- Speech -->
+      <text x="240" y="20" font-family="Caveat, cursive" font-size="16" fill="#2E7D32" text-anchor="middle" font-weight="700">"I got 9 every time! GOGOGOGO!"</text>
+      <text x="240" y="38" font-family="Fredoka, sans-serif" font-size="12" fill="#4CAF50" text-anchor="middle" font-weight="500">Can you beat Speedster?</text>
+    </svg>
+  </div>
+
+  <!-- 5 rounds -->
+  <div>
+    <div class="speedster-row">
+      <div class="speedster-round-label">Round 1</div>
+      <div class="speedster-letter-box">?</div>
+      <div class="speedster-write-line"><div class="midline"></div></div>
+      <div class="speedster-count">
+        <div class="count-box">
+          <div style="font-size:9px; color: var(--purple-mid);">COUNT</div>
+          <div class="count-val">&nbsp;</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="speedster-row">
+      <div class="speedster-round-label">Round 2</div>
+      <div class="speedster-letter-box">?</div>
+      <div class="speedster-write-line"><div class="midline"></div></div>
+      <div class="speedster-count">
+        <div class="count-box">
+          <div style="font-size:9px; color: var(--purple-mid);">COUNT</div>
+          <div class="count-val">&nbsp;</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="speedster-row">
+      <div class="speedster-round-label">Round 3</div>
+      <div class="speedster-letter-box">?</div>
+      <div class="speedster-write-line"><div class="midline"></div></div>
+      <div class="speedster-count">
+        <div class="count-box">
+          <div style="font-size:9px; color: var(--purple-mid);">COUNT</div>
+          <div class="count-val">&nbsp;</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="speedster-row">
+      <div class="speedster-round-label">Round 4</div>
+      <div class="speedster-letter-box">?</div>
+      <div class="speedster-write-line"><div class="midline"></div></div>
+      <div class="speedster-count">
+        <div class="count-box">
+          <div style="font-size:9px; color: var(--purple-mid);">COUNT</div>
+          <div class="count-val">&nbsp;</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="speedster-row">
+      <div class="speedster-round-label">Round 5</div>
+      <div class="speedster-letter-box">?</div>
+      <div class="speedster-write-line"><div class="midline"></div></div>
+      <div class="speedster-count">
+        <div class="count-box">
+          <div style="font-size:9px; color: var(--purple-mid);">COUNT</div>
+          <div class="count-val">&nbsp;</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scoreboard -->
+  <div style="text-align: center; margin: 14px 0 8px;">
+    <svg viewBox="0 0 400 55" width="380" height="50">
+      <rect x="20" y="2" width="360" height="50" rx="10" fill="var(--purple-bg)" stroke="var(--purple-light)" stroke-width="2"/>
+      <!-- Trophy -->
+      <path d="M 50 12 L 53 32 H 67 L 70 12 Z" fill="#FFD54F" stroke="#FFB74D" stroke-width="1.5"/>
+      <path d="M 50 12 H 70" stroke="#FFB74D" stroke-width="2" stroke-linecap="round"/>
+      <rect x="57" y="32" width="6" height="4" fill="#FFB74D"/>
+      <rect x="53" y="36" width="14" height="3" rx="1" fill="#FFB74D"/>
+      <path d="M 50 16 Q 40 16 40 22 Q 40 28 50 28" fill="none" stroke="#FFB74D" stroke-width="1.5"/>
+      <path d="M 70 16 Q 80 16 80 22 Q 80 28 70 28" fill="none" stroke="#FFB74D" stroke-width="1.5"/>
+      <text x="210" y="22" font-family="Fredoka, sans-serif" font-size="13" font-weight="600" fill="var(--purple-dark)" text-anchor="middle">Rounds you beat Speedster:</text>
+      <text x="210" y="42" font-family="Fredoka, sans-serif" font-size="14" font-weight="700" fill="var(--purple-dark)" text-anchor="middle">_____ out of 5</text>
+    </svg>
+  </div>
+
+  <div class="parent-note">
+    <div class="note-label">&#x1F9E9; How to run this</div>
+    <p>Write a letter in the <strong>"?"</strong> box for each round (or let him pick). Set a phone timer for <strong>15 seconds</strong>. He writes that letter as many times as he can. Count them up and write the number. Tell him Speedster got 9 &mdash; did he beat Speedster? (Spoiler: he probably did.)</p>
+  </div>
+
+  <span class="page-footer">Monster Letters &bull; Day 3</span>
+  <span class="page-number">2</span>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 3: SPEED DRILL 2 — WORD FIX (UNSCRAMBLE)                -->
+<!-- ============================================================ -->
+<div class="page">
+
+  <div class="drill-header">
+    <span class="phase-badge">Phase 2 &bull; Drill 2</span>
+    <h2>Word Fix</h2>
+    <span class="timer-badge">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="13" r="9"/><path d="M12 9v4l2.5 2.5"/><path d="M10 2h4"/></svg>
+      4 min
+    </span>
+  </div>
+
+  <div class="instructions">
+    <div class="icon">&#x1F500;</div>
+    <p>Speedster wrote these words way too fast and <strong>mixed up all the letters!</strong> Figure out the real word and write it correctly. Sound it out &mdash; what word is hiding in there?</p>
+  </div>
+
+  <div class="unscramble-grid">
+    <!-- OGD -> DOG -->
+    <div class="unscramble-card">
+      <div class="scrambled-word">
+        <div class="scrambled-text">OGD</div>
+        <div class="arrow-hint">&#x27A1;&#xFE0F;</div>
+      </div>
+      <div class="word-fix-write">
+        <div class="word-number">#1 &mdash; Unscramble it!</div>
+        <div class="word-fix-line"><div class="midline"></div></div>
+      </div>
+    </div>
+
+    <!-- TAC -> CAT -->
+    <div class="unscramble-card">
+      <div class="scrambled-word">
+        <div class="scrambled-text">TAC</div>
+        <div class="arrow-hint">&#x27A1;&#xFE0F;</div>
+      </div>
+      <div class="word-fix-write">
+        <div class="word-number">#2 &mdash; Unscramble it!</div>
+        <div class="word-fix-line"><div class="midline"></div></div>
+      </div>
+    </div>
+
+    <!-- NUS -> SUN -->
+    <div class="unscramble-card">
+      <div class="scrambled-word">
+        <div class="scrambled-text">NUS</div>
+        <div class="arrow-hint">&#x27A1;&#xFE0F;</div>
+      </div>
+      <div class="word-fix-write">
+        <div class="word-number">#3 &mdash; Unscramble it!</div>
+        <div class="word-fix-line"><div class="midline"></div></div>
+      </div>
+    </div>
+
+    <!-- THA -> HAT -->
+    <div class="unscramble-card">
+      <div class="scrambled-word">
+        <div class="scrambled-text">THA</div>
+        <div class="arrow-hint">&#x27A1;&#xFE0F;</div>
+      </div>
+      <div class="word-fix-write">
+        <div class="word-number">#4 &mdash; Unscramble it!</div>
+        <div class="word-fix-line"><div class="midline"></div></div>
+      </div>
+    </div>
+
+    <!-- GUB -> BUG -->
+    <div class="unscramble-card">
+      <div class="scrambled-word">
+        <div class="scrambled-text">GUB</div>
+        <div class="arrow-hint">&#x27A1;&#xFE0F;</div>
+      </div>
+      <div class="word-fix-write">
+        <div class="word-number">#5 &mdash; Unscramble it!</div>
+        <div class="word-fix-line"><div class="midline"></div></div>
+      </div>
+    </div>
+
+    <!-- DAM -> MAD -->
+    <div class="unscramble-card">
+      <div class="scrambled-word">
+        <div class="scrambled-text">DAM</div>
+        <div class="arrow-hint">&#x27A1;&#xFE0F;</div>
+      </div>
+      <div class="word-fix-write">
+        <div class="word-number">#6 &mdash; Unscramble it!</div>
+        <div class="word-fix-line"><div class="midline"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCORING -->
+  <div class="score-section">
+    <div class="score-box">
+      <div class="score-label">Words Tried</div>
+      <div class="score-value">&nbsp;</div>
+      <div class="score-max">out of 6</div>
+    </div>
+    <div class="score-box bonus">
+      <div class="score-label">Correct</div>
+      <div class="score-value">&nbsp;</div>
+      <div class="score-max">out of 6</div>
+    </div>
+    <div class="score-box total">
+      <div class="score-label">Day 3 Total</div>
+      <div class="score-value">&nbsp;</div>
+      <div class="score-max">out of 12</div>
+    </div>
+  </div>
+
+  <div class="parent-note" style="margin-top: 14px;">
+    <div class="note-label">&#x1F4A1; Hints if he's stuck</div>
+    <p>If a scramble is tough, try saying the letters out loud in different orders: "O-G-D... what if we try D-O-G?" Keep it playful &mdash; "Speedster really messed this one up!" Score: 1 point per attempt, 1 bonus point per correct unscramble.</p>
+  </div>
+
+  <span class="page-footer">Monster Letters &bull; Day 3</span>
+  <span class="page-number">3</span>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 4: CHALLENGE — RACE SPEEDSTER + SLOW DOWN SENTENCE      -->
+<!-- ============================================================ -->
+<div class="page">
+
+  <div class="drill-header">
+    <span class="phase-badge">Phase 3</span>
+    <h2>Race Speedster!</h2>
+    <span class="timer-badge">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="13" r="9"/><path d="M12 9v4l2.5 2.5"/><path d="M10 2h4"/></svg>
+      5 min
+    </span>
+  </div>
+
+  <div class="instructions">
+    <div class="icon">&#x1F3C1;</div>
+    <p>Speedster wants to <strong>race you!</strong> He says he can write this sentence faster than you can. A grown-up says "GO!" and starts the timer. Write the sentence as fast as you can!</p>
+  </div>
+
+  <!-- The race -->
+  <div class="race-section">
+    <div class="race-label">&#x26A1; The Sentence Race</div>
+    <div class="writing-prompt">
+      <p>THE CUP IS ON THE RUG.</p>
+    </div>
+    <div class="writing-line"><div class="midline"></div></div>
+    <div class="writing-line"><div class="midline"></div></div>
+
+    <!-- Timer result -->
+    <div style="display: flex; gap: 16px; margin-top: 14px; align-items: center; justify-content: center;">
+      <div style="border: 3px solid var(--green-accent); border-radius: 12px; padding: 12px 20px; text-align: center; background: white;">
+        <div style="font-size: 10px; font-weight: 600; color: var(--green-accent); text-transform: uppercase; letter-spacing: 1px;">Your time</div>
+        <div style="font-size: 36px; font-weight: 700; color: var(--purple-dark); line-height: 1;">&nbsp;</div>
+        <div style="font-size: 12px; color: var(--purple-mid); font-weight: 500;">seconds</div>
+      </div>
+      <div style="font-size: 24px; font-weight: 700; color: var(--purple-mid);">vs.</div>
+      <div style="border: 3px solid var(--gray-line); border-radius: 12px; padding: 12px 20px; text-align: center; background: #F5F5F5;">
+        <div style="font-size: 10px; font-weight: 600; color: #888; text-transform: uppercase; letter-spacing: 1px;">Speedster's time</div>
+        <div style="font-size: 36px; font-weight: 700; color: var(--purple-dark); line-height: 1;">&nbsp;</div>
+        <div style="font-size: 12px; color: #888; font-weight: 500;">seconds</div>
+      </div>
+    </div>
+    <p style="text-align: center; font-size: 12px; color: var(--green-accent); font-weight: 600; margin-top: 8px;">&#x1F3C6; WINNER: ____________________</p>
+  </div>
+
+  <!-- Slow Down sentence -->
+  <div class="bonus-section">
+    <div class="bonus-label">&#x2B50; Tell Speedster to Slow Down!</div>
+    <p style="font-size: 14px; margin-bottom: 10px;">Write <strong>one sentence</strong> telling Speedster he needs to slow down. What would you say to him?</p>
+    <div class="writing-line"><div class="midline"></div></div>
+    <div class="writing-line"><div class="midline"></div></div>
+    <div class="writing-line"><div class="midline"></div></div>
+  </div>
+
+  <!-- Drawing area -->
+  <div style="margin-top: 14px;">
+    <p style="font-size: 13px; font-weight: 600; color: var(--purple-mid); margin-bottom: 6px;">Finished early? Draw Speedster zooming through Scribble's kitchen!</p>
+    <div class="drawing-area">
+      <p>Your drawing here</p>
+    </div>
+  </div>
+
+  <span class="page-footer">Monster Letters &bull; Day 3</span>
+  <span class="page-number">4</span>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE 5: PARENT GUIDE                                         -->
+<!-- ============================================================ -->
+<div class="page">
+
+  <div class="drill-header">
+    <span class="phase-badge">For Parents</span>
+    <h2>Day 3 Guide</h2>
+  </div>
+
+  <div class="timing-strip">
+    <div class="timing-block">
+      <div class="t-phase">Phase 1</div>
+      <div class="t-time">2 min</div>
+      <div class="t-desc">Story + jumbled labels</div>
+    </div>
+    <div class="timing-block">
+      <div class="t-phase">Phase 2</div>
+      <div class="t-time">7 min</div>
+      <div class="t-desc">Speedster Challenge + Word Fix</div>
+    </div>
+    <div class="timing-block">
+      <div class="t-phase">Phase 3</div>
+      <div class="t-time">5 min</div>
+      <div class="t-desc">Sentence race + slow down</div>
+    </div>
+  </div>
+
+  <div class="script-box">
+    <div class="script-label">What's new today</div>
+    <p><strong>Speedster!</strong> This is the first new character. Play him up with energy &mdash; talk fast, be loud, say "GOGOGOGO!" Speedster normalizes speed by being comically TOO fast. The implicit lesson: going fast is fun, and even if you mess up (like Speedster), you just fix it and keep going.</p>
+  </div>
+
+  <div class="script-box">
+    <div class="script-label">Phase 1 &mdash; Jumbled labels</div>
+    <p>Page 1 has the three jumbled labels (UPC, OTP, ROFK). Let your child puzzle them out &mdash; this is a decoding game, not a test. If he's stuck, say the letters in different orders until the word clicks. Writing the correct word below is a quick warm-up. The kitchen item pictures from Day 2 make a nice callback.</p>
+  </div>
+
+  <div class="script-box">
+    <div class="script-label">Phase 2 &mdash; Speedster Challenge (page 2)</div>
+    <p>Write a letter in each "?" box (or let him pick). Set the timer for <strong>15 seconds per round</strong>. He writes that letter as many times as he can. Count the results. Tell him Speedster's score was 9 &mdash; he'll almost certainly beat it, which feels great. If he only gets 7-8, say "Speedster barely won that one &mdash; rematch next time!" <strong>Do NOT comment on letter formation</strong> during this drill.</p>
+  </div>
+
+  <div class="script-box">
+    <div class="script-label">Phase 2 &mdash; Word Fix (page 3)</div>
+    <p>The scrambled words: OGD=DOG, TAC=CAT, NUS=SUN, THA=HAT, GUB=BUG, DAM=MAD. Let him work through them. If he's stuck, say the letters out loud in different orders. He writes the correct word on the line. Score: 1 point per attempt, 1 bonus for correct unscramble.</p>
+  </div>
+
+  <div class="script-box">
+    <div class="script-label">Phase 3 &mdash; The race (page 4)</div>
+    <p>The sentence is: <strong>THE CUP IS ON THE RUG.</strong> Start the timer when you say "GO!" Write his time in the left box. Then &mdash; this is the key &mdash; tell him Speedster's time was <strong>1 second slower</strong> than whatever he got. He always wins. Then he writes one sentence telling Speedster to slow down (any sentence is fine).</p>
+  </div>
+
+  <div class="guide-grid">
+    <div class="guide-box do-box">
+      <h3>Day 3 Wins</h3>
+      <ul>
+        <li>He decoded at least 2 jumbled labels</li>
+        <li>He tried all 5 Speedster Challenge rounds</li>
+        <li>He attempted the unscramble words</li>
+        <li>He wrote the race sentence</li>
+        <li>He "beat" Speedster (he always does)</li>
+      </ul>
+    </div>
+    <div class="guide-box dont-box">
+      <h3>Watch for</h3>
+      <ul>
+        <li>Erasing during the Speedster Challenge &mdash; "no erasing, just keep going!"</li>
+        <li>Frustration with scrambled words &mdash; give hints freely, it's a game</li>
+        <li>Wanting to rewrite the race sentence neater &mdash; the messy version counts!</li>
+        <li>Going over 15 minutes &mdash; stop on time even mid-task</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="parent-note" style="margin-top: 14px;">
+    <div class="note-label">&#x1F4AC; Looking ahead</div>
+    <p><strong>Tomorrow (Day 4)</strong> introduces Backwards Bob, who does everything in reverse! The writing drills shift to correcting backwards words and writing things "the right way." It's another silly character that makes messy writing feel normal and fixable.</p>
+  </div>
+
+  <span class="page-footer">Monster Letters &bull; Day 3</span>
+  <span class="page-number">5</span>
+</div>
+
+</body>
+</html>
